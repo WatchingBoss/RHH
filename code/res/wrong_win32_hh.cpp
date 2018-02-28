@@ -261,7 +261,7 @@ WinMain(HINSTANCE Instance,
 				}
 				for (DWORD ControllerIndex = 0;
 					 ControllerIndex < XUSER_MAX_COUNT;
-					 ControllerIndex)
+					 ++ControllerIndex)
 				{
 					XINPUT_STATE ControllerState;
 				    if(XInputGetState(ControllerIndex, &ControllerState) == ERROR_SUCCESS)
