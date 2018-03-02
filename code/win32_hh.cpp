@@ -153,7 +153,8 @@ Win32InitDSound(HWND Window,int32 SamplesPerSecond, int32 BufferSize)
 			BufferDescription.dwFlags = 0;
 			BufferDescription.dwBufferBytes = BufferSize;
 			BufferDescription.lpwfxFormat = &WaveFormat;
-			HRESULT Error = DirectSound->CreateSoundBuffer(&BufferDescription, &GlobalSecondaryBuffer, 0); 
+			HRESULT Error =
+				DirectSound->CreateSoundBuffer(&BufferDescription, &GlobalSecondaryBuffer, 0); 
 			if(SUCCEEDED(Error))
 			{
 				OutputDebugStringA("SecondaryPrimaty buffer created successfully\n");
