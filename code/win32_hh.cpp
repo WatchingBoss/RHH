@@ -464,6 +464,10 @@ WinMain(HINSTANCE Instance,
 		LPSTR     CommandLine,
 		int       ShowCode)
 {
+	LARGE_INTEGER PerfCountFrequencyResult;
+	QueryPerformanceFrequency(&PerfCountFrequencyResult);
+	int64 PerfCountFrequency = PerfCountFrequencyResult.QuadPart;
+
 	Win32LoadXInput();
 	
  	WNDCLASS WindowClass = {};
@@ -475,7 +479,7 @@ WinMain(HINSTANCE Instance,
  	WindowClass.hInstance = Instance;
 	// WindowClass.hIcon;
     WindowClass.lpszClassName = "HHWindowClass";
-
+	
 	if (RegisterClass(&WindowClass))
 	{
 		HWND Window =
@@ -515,10 +519,13 @@ WinMain(HINSTANCE Instance,
 			Win32InitDSound(Window, SoundOutput.SamplesPerSecond, SoundOutput.SecondaryBufferSize);
 			Win32FillSoundBuffer(&SoundOutput, 0, SoundOutput.LatencySampleCount * SoundOutput.BytesPerSample);
 			GlobalSecondaryBuffer->Play(0, 0, DSBPLAY_LOOPING);
-			    
+
 			GlobalRunning = true;
+
+			LARGE_INTEGER LastCounter;
+			QueryPerformanceCounter(&LastCounter);				
 			while(GlobalRunning)
-			{
+			{				
 				MSG Message;
 				while (PeekMessage(&Message, 0, 0, 0, PM_REMOVE))
 				{
@@ -604,6 +611,15 @@ WinMain(HINSTANCE Instance,
 				win32_window_dimension Dimension = Win32GetWindowDimension(Window);
 			    Win32DisplayBufferInWindow(&GlobalBackbuffer, DeviceContext,
 										   Dimension.Width, Dimension.Height);
+
+				LARGE_INTEGER EndCounter;
+				QueryPerformanceCounter(&EndCounter);
+
+				// TODO(santa): Display the value here
+				int64 CounterElapsed = EndCounter.QuadPart - LastCounter.QuadPart;
+				CounterElapsed / PerfCountFrequency;
+				
+				LastCounter = EndCounter;
 			}
 		}
 		else
