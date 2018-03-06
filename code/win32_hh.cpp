@@ -6,14 +6,27 @@
 	$Notice: $
    ===========================================================*/
 
-#include <windows.h>
-#include <stdint.h>
-#include <stdio.h>
-#include <xinput.h>
-#include <dsound.h>
+/*
+ * TODO(santa): THIS IS NOT A FINAL PLATFORM LAYER!
 
-// TODO(santa): Implement sine ourselves
-#include <math.h>
+	- Saved game locations
+	- Getting a handle to our own executeble file
+	- Asset loading path
+	- Threading (launch a thread)
+	- Raw Input (support for multiple keyboards)
+	- Sleep/timeBeginPeriod
+	- ClipCurser() (for multimonitor support)
+	- Fullscreen support
+	- WM_SETCURSOR (control cursor visibility)
+	- QueryCancelAutoplay
+	- Blit speed improvements (BitBit)
+	- Hardware acceleration (OpenGL or Direct3D or BOTH?)
+	- GetKeyboardLayout (for French keybords, international WASD support)
+
+	Just a partial list of stuff!	
+*/
+
+#include <stdint.h>
 
 #define internal        static 
 #define local_persist   static
@@ -25,15 +38,27 @@ typedef int8_t  int8;
 typedef int16_t int16;
 typedef int32_t int32;
 typedef int64_t int64;
-typedef int32 bool32;
+typedef int32   bool32;
 
 typedef uint8_t  uint8;
 typedef uint16_t uint16;
 typedef uint32_t uint32;
 typedef uint64_t uint64;
 
-typedef float real32;
+typedef float  real32;
 typedef double real64;
+
+#include "hh.h"
+#include "hh.cpp"
+
+#include <windows.h>
+#include <stdio.h>
+#include <xinput.h>
+#include <dsound.h>
+
+// TODO(santa): Implement sine ourselves
+#include <math.h>
+
 
 struct win32_offscreen_buffer
 {
@@ -78,6 +103,13 @@ global_variable x_input_set_state *XInputSetState_ = XInputSetStateStub;
 
 #define DIRECT_SOUND_CREATE(name) HRESULT WINAPI name(LPCGUID pcGuidDevice, LPDIRECTSOUND *ppDS, LPUNKNOWN pUnkOuter);
 typedef DIRECT_SOUND_CREATE(direct_sound_create);
+
+void *
+PlatformLoadFile(char *FileName)
+{
+	// NOTE(santa): Implements the Win32 file loading
+	return(0);
+}
 
 internal void
 Win32LoadXInput(void)
@@ -198,27 +230,6 @@ Win32GetWindowDimension(HWND Window)
     Result.Height = ClientRect.bottom - ClientRect.top;
 	
 	return(Result);
-}
-
-internal void
-RenderWeirdGradient(win32_offscreen_buffer *Buffer, int XOffset, int YOffset)
-{
-	// TODO(santa): Let's see what the optimizer does
-
-	uint8 *Row = (uint8 *)Buffer->Memory;
-	for (int Y = 0; Y < Buffer->Height; ++Y)
-	{
-		uint32 *Pixel = (uint32 *)Row;
-		for (int X = 0; X < Buffer->Width; ++X)
-		{
-			uint8 Blue  = (X + XOffset);
-			uint8 Green = (Y + YOffset);
-			
-			*Pixel++  = ((Green << 8) | Blue); 
-		}
-
-		Row += Buffer->Pitch;
-	}
 }
 
 internal void
@@ -416,7 +427,6 @@ internal void
 Win32FillSoundBuffer(win32_sound_output *SoundOutput, DWORD ByteToLock, DWORD BytesToWrite)
 {
 	// TODO(santa): More strenuous test!
-	// TODO(santa): Switch to a sine wave
 	VOID *Region1;
 	DWORD Region1Size;
 	VOID *Region2;
@@ -579,8 +589,12 @@ WinMain(HINSTANCE Instance,
 						// NOTE(santa): The controller is not available
 					}
 				}				
-				
-				RenderWeirdGradient(&GlobalBackbuffer, XOffset, YOffset);
+				game_offscreen_buffer Buffer = {};
+				Buffer.Memory = GlobalBackbuffer.Memory;
+				Buffer.Width  = GlobalBackbuffer.Width;
+				Buffer.Height = GlobalBackbuffer.Height;
+				Buffer.Pitch  = GlobalBackbuffer.Pitch;
+				GameUpdateAndRender(&Buffer, XOffset, YOffset);
 
 				// NOTE(santa): DirectSound output test
 				DWORD PlayCursor;
@@ -594,9 +608,6 @@ WinMain(HINSTANCE Instance,
 						  (SoundOutput.LatencySampleCount * SoundOutput.BytesPerSample)) %
 						 SoundOutput.SecondaryBufferSize); 
 					DWORD BytesToWrite;
-					
-					// TODO(santa): Change this to using a lowe latency offset from the playcursor
-					// when we actually start having sound effects.	
 					if(ByteToLock > TargetCursor)
 					{
 						BytesToWrite = (SoundOutput.SecondaryBufferSize - ByteToLock);
@@ -626,9 +637,9 @@ WinMain(HINSTANCE Instance,
 			    real64 FPS = (real64)PerfCountFrequency / (real64)CounterElapsed;
 			    real64 MCPF = (real64)(CyclesElapsed / 1000000.0f);
 
-				char Buffer[256];
-				sprintf(Buffer, "%.2fms/f, %.2ff/s, %.2fmc/f\n", MSPerFrame, FPS, MCPF);
-				OutputDebugStringA(Buffer);
+				char Buffer1[256];
+				sprintf(Buffer1, "%.2fms/f, %.2ff/s, %.2fmc/f\n", MSPerFrame, FPS, MCPF);
+				OutputDebugStringA(Buffer1);
 				
 				LastCounter = EndCounter;
 				LastCycleCount = EndCycleCount;
