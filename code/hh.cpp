@@ -56,11 +56,18 @@ GameUpdateAndRender(game_memory *Memory,
 					game_sound_output_buffer *SoundBuffer)
 {
 	Assert(sizeof(game_state) <= Memory->PermanentStorageSize);
-	
-	game_state *GameState = (game_state *)Memory->PermanentStorage;
+   	game_state *GameState = (game_state *)Memory->PermanentStorage;
 	if (!Memory->IsInitialized)
 	{
-		GameState->ToneHz      = 256;
+		char *Filename = "test.bmp";
+
+		void *BitmapMemory = DEBUGPlatformReadEntireFile(Filename);
+		if(BitmapMemory)
+		{
+			DEBUGPlatformFreeFileMemory(BitmapMemory);
+		}
+
+		GameState->ToneHz = 256;
 
 		// TODO(santa): This may be more appropriate to do in the platform layer
 		Memory->IsInitialized = true;

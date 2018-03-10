@@ -31,10 +31,17 @@
 #define Terabytes(Value) (Gigabytes(Value) * 1024LL)
 
 #define ArrayCount(Array) (sizeof(Array) / sizeof((Array)[0]))
+//TODO(santa): swap, min, max ... macros?
 
 /*
-	TODO(santa): Services that the platform layer provides to the game
+	NOTE(santa): Services that the platform layer provides to the game
 */
+
+#if HH_INTERNAL
+internal void *DEBUGPlatformReadEntireFile(char *Filename);
+internal void DEBUGPlatformFreeFileMemory(void *Memory);
+internal bool32 DEBUGPlatformWritenEntireFile(char *Filename, uint32 MemorySize, void *Memory);
+#endif
 
 /*
 	NOTE(santa): Services that the game provides to the platform layer.
