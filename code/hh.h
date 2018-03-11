@@ -33,14 +33,34 @@
 #define ArrayCount(Array) (sizeof(Array) / sizeof((Array)[0]))
 //TODO(santa): swap, min, max ... macros?
 
+inline uint32
+SafeTruncateUInt64(uint64 Value)
+{
+	// TODO(santa): Desines for maximum valuesx
+	Assert(Value <= 0xFFFFFFFF);
+	uint32 Result = (uint32)Value;
+	return(Result);
+}
+
 /*
 	NOTE(santa): Services that the platform layer provides to the game
 */
 
 #if HH_INTERNAL
-internal void *DEBUGPlatformReadEntireFile(char *Filename);
+/*
+IMPORTANT(santa):
+
+These are NOT for doint anything in the shipping game - they are
+blocking and the write doesn't protect against lost data! 
+*/
+struct debug_read_file_result
+{
+	uint32 ContentsSize;
+	void *Contents;
+};
+internal debug_read_file_result DEBUGPlatformReadEntireFile(char *Filename);
 internal void DEBUGPlatformFreeFileMemory(void *Memory);
-internal bool32 DEBUGPlatformWritenEntireFile(char *Filename, uint32 MemorySize, void *Memory);
+internal bool32 DEBUGPlatformWrittenEntireFile(char *Filename, uint32 MemorySize, void *Memory);
 #endif
 
 /*

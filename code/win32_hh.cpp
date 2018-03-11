@@ -89,33 +89,50 @@ global_variable x_input_set_state *XInputSetState_ = XInputSetStateStub;
 #define DIRECT_SOUND_CREATE(name) HRESULT WINAPI name(LPCGUID pcGuidDevice, LPDIRECTSOUND *ppDS, LPUNKNOWN pUnkOuter);
 typedef DIRECT_SOUND_CREATE(direct_sound_create);
 
-internal void *
+internal debug_read_file_result
 DEBUGPlatformReadEntireFile(char *Filename)
 {
-	void *Result = 0;
+	debug_read_file_result Result = {};
 
-	HANDLE FileHandle =  CreateFile(Filename, GENERIC_READ, FILE_SHARE_READ, 0, OPEN_EXISTING, 0, 0);
+	HANDLE FileHandle =  CreateFileA(Filename, GENERIC_READ, FILE_SHARE_READ, 0, OPEN_EXISTING, 0, 0);
 	if(FileHandle != INVALID_HANDLE_VALUE)
 	{
 		LARGE_INTEGER FileSize;
 		if (GetFileSizeEx(FileHandle, &FileSize))
 		{
-			Assert(FileSize.QuadPart <= 0xFFFFFFFF);
-			uint32 FileSize32 = (uint32)FileSize.QuadPart;
-			Result = VirtualAlloc(0, FIleSize32, MEM_RESERVE|MEM_COMMIT, PAGE_READWRITE);//37:07
-			if (Result)
+			uint32 FileSize32 = SafeTruncateUInt64(FileSize.QuadPart);
+			Result.Contents = VirtualAlloc(0, FileSize32, MEM_RESERVE|MEM_COMMIT, PAGE_READWRITE);
+			if (Result.Contents)
 			{
-				if(ReadFile(FileHandle, Result, FileSize.QuadPart, &BytesRead, 0))
+				DWORD BytesRead;
+				if(ReadFile(FileHandle, Result.Contents, FileSize32, &BytesRead, 0) &&
+				   (FileSize32 == BytesRead))
 				{
+					// NOTE(santa): File read successfully
+					Result.ContentsSize = FileSize32;
 				}
 				else
 				{
+					// TODO(santa): Logging
+					DEBUGPlatformFreeFileMemory(Result.Contents);
+					Result.Contents = 0;
 				}
 			}
+			else
+			{
+				// TODO(santa): Logging
+			}
+		}
+		else
+		{
+			// TODO(santa): Logging
 		}
 		CloseHandle(FileHandle);
 	}
-
+	else
+	{
+		// TODO(santa): Logging
+	}
 	return(Result);
 }
 
@@ -129,8 +146,30 @@ DEBUGPlatformFreeFileMemory(void *Memory)
 }
 
 internal bool32
-DEBUGPlatformWritenEntireFile(char *Filename, uint32 MemorySize, void *Memory)
-{
+DEBUGPlatformWrittenEntireFile(char *Filename, uint32 MemorySize, void *Memory)
+{	
+	bool32 Result = false;
+
+	HANDLE FileHandle =  CreateFileA(Filename, GENERIC_WRITE, 0, 0, CREATE_ALWAYS, 0, 0);
+	if(FileHandle != INVALID_HANDLE_VALUE)
+	{
+		DWORD BytesWritten;
+		if(ReadFile(FileHandle, Memory, MemorySize, &BytesWritten, 0))
+		{
+			// NOTE(santa): File read successfully
+			Result = (BytesWritten == MemorySize);
+		}
+		else
+		{
+			// TODO(santa): Logging
+		}
+		CloseHandle(FileHandle);
+	}
+	else
+	{
+		// TODO(santa): Logging
+	}
+	return(Result);
 }
 
 internal void

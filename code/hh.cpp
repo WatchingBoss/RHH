@@ -59,12 +59,15 @@ GameUpdateAndRender(game_memory *Memory,
    	game_state *GameState = (game_state *)Memory->PermanentStorage;
 	if (!Memory->IsInitialized)
 	{
-		char *Filename = "test.bmp";
+		char *Filename = __FILE__;
 
-		void *BitmapMemory = DEBUGPlatformReadEntireFile(Filename);
-		if(BitmapMemory)
+		debug_read_file_result File = DEBUGPlatformReadEntireFile(Filename);
+// F:\\Documents\\Projects_C\\RHH\\data\\test.out
+		if(File.Contents)
 		{
-			DEBUGPlatformFreeFileMemory(BitmapMemory);
+		    DEBUGPlatformWrittenEntireFile("test.out",
+											File.ContentsSize, File.Contents);
+			DEBUGPlatformFreeFileMemory(File.Contents);
 		}
 
 		GameState->ToneHz = 256;
