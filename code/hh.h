@@ -96,7 +96,7 @@ struct game_controller_input
 {
 	bool32 IsAnalog;
 	
-	real32 StartX;
+ 	real32 StartX;
 	real32 StartY;
 
 	real32 MinX;
