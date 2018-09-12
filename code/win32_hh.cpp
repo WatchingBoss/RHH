@@ -2,12 +2,12 @@
 	$File: $
 	$Date: $
 	$Revision: $
-	$Creator: Egor Smirnov (Santa) $
+	$Creator: Egor Smirnov (Acton) $
 	$Notice: $
    ===========================================================*/
 
 /*
- * TODO(santa): THIS IS NOT A FINAL PLATFORM LAYER!
+ * TODO(action): THIS IS NOT A FINAL PLATFORM LAYER!
 
 	- Saved game locations
 	- Getting a handle to our own executeble file
@@ -26,11 +26,11 @@
 	Just a partial list of stuff!	
 */
 
-// TODO(santa): Implement sine ourselves
+// TODO(action): Implement sine ourselves
 #include <math.h>
 #include <stdint.h>
 
-#define internal        static 
+#define internal        static
 #define local_persist   static
 #define global_variable static
 
@@ -61,12 +61,12 @@ typedef double real64;
 
 #include "win32_hh.h"
 
-// TODO(santa): This is a global for now.
+// TODO(action): This is a global for now.
 global_variable bool32 GlobalRunning;
 global_variable win32_offscreen_buffer GlobalBackbuffer;
 global_variable LPDIRECTSOUNDBUFFER GlobalSecondaryBuffer;
 
-// NOTE(santa): XInputGetState
+// NOTE(action): XInputGetState
 #define X_INPUT_GET_STATE(name) DWORD WINAPI name(DWORD dwUserIndex, XINPUT_STATE *pState)
 typedef X_INPUT_GET_STATE(x_input_get_state);
 X_INPUT_GET_STATE(XInputGetStateStub)
@@ -76,7 +76,7 @@ X_INPUT_GET_STATE(XInputGetStateStub)
 global_variable x_input_get_state *XInputGetState_ = XInputGetStateStub;
 #define XInputGetState XInputGetState_
 
-// NOTE(santa): XInputSetState
+// NOTE(action): XInputSetState
 #define X_INPUT_SET_STATE(name) DWORD WINAPI name(DWORD dwUserIndex, XINPUT_VIBRATION *pVibration)
 typedef X_INPUT_SET_STATE(x_input_set_state);
 X_INPUT_SET_STATE(XInputSetStateStub)
@@ -108,30 +108,30 @@ DEBUGPlatformReadEntireFile(char *Filename)
 				if(ReadFile(FileHandle, Result.Contents, FileSize32, &BytesRead, 0) &&
 				   (FileSize32 == BytesRead))
 				{
-					// NOTE(santa): File read successfully
+					// NOTE(action): File read successfully
 					Result.ContentsSize = FileSize32;
 				}
 				else
 				{
-					// TODO(santa): Logging
+					// TODO(action): Logging
 					DEBUGPlatformFreeFileMemory(Result.Contents);
 					Result.Contents = 0;
 				}
 			}
 			else
 			{
-				// TODO(santa): Logging
+				// TODO(action): Logging
 			}
 		}
 		else
 		{
-			// TODO(santa): Logging
+			// TODO(action): Logging
 		}
 		CloseHandle(FileHandle);
 	}
 	else
 	{
-		// TODO(santa): Logging
+		// TODO(action): Logging
 	}
 	return(Result);
 }
@@ -156,18 +156,18 @@ DEBUGPlatformWrittenEntireFile(char *Filename, uint32 MemorySize, void *Memory)
 		DWORD BytesWritten;
 		if(ReadFile(FileHandle, Memory, MemorySize, &BytesWritten, 0))
 		{
-			// NOTE(santa): File read successfully
+			// NOTE(action): File read successfully
 			Result = (BytesWritten == MemorySize);
 		}
 		else
 		{
-			// TODO(santa): Logging
+			// TODO(action): Logging
 		}
 		CloseHandle(FileHandle);
 	}
 	else
 	{
-		// TODO(santa): Logging
+		// TODO(action): Logging
 	}
 	return(Result);
 }
@@ -178,13 +178,13 @@ Win32LoadXInput(void)
 	HMODULE XInputLibrary = LoadLibraryA("xinput1_4.dll");
 	if(!XInputLibrary)
 	{
-		// TODO(santa): Diagnostic
+		// TODO(action): Diagnostic
 		HMODULE XInputLibrary = LoadLibraryA("xinput9_1_0.dll");
 	}
   
 	if(!XInputLibrary)
 	{
-		// TODO(santa): Diagnostic
+		// TODO(action): Diagnostic
 		HMODULE XInputLibrary = LoadLibraryA("xinput1_3.dll");
 	}
 	if(XInputLibrary)
@@ -194,23 +194,23 @@ Win32LoadXInput(void)
 		XInputSetState = (x_input_set_state *)GetProcAddress(XInputLibrary, "XInputSetState");
 		if (!XInputSetState) {XInputSetState = XInputSetStateStub;}
 
-		// TODO(santa): Diagnostic
+		// TODO(action): Diagnostic
 	}
 	else
 	{
-		// TODO(santa): Diagnostic
+		// TODO(action): Diagnostic
 	}
 }
 
 internal void
 Win32InitDSound(HWND Window,int32 SamplesPerSecond, int32 BufferSize)
 {
-	// NOTE(santa): Load the library
+	// NOTE(action): Load the library
 	HMODULE DSoundLibrary = LoadLibraryA("dsound.dll");
 
 	if(DSoundLibrary)
 	{
-		// NOTE(santa): Get a DirectSound object! - cooperative
+		// NOTE(action): Get a DirectSound object! - cooperative
 		direct_sound_create *DirectSoundCreate = (direct_sound_create *)
 			GetProcAddress(DSoundLibrary, "DirectSoundCreate");
 	    LPDIRECTSOUND DirectSound;
@@ -247,15 +247,15 @@ Win32InitDSound(HWND Window,int32 SamplesPerSecond, int32 BufferSize)
 				}
 				else
 				{
-					// TODO(santa): Diagnostic 	
+					// TODO(action): Diagnostic 	
 				}
 			}
 			else
 			{
-				// TODO(santa): Diagnostic 	
+				// TODO(action): Diagnostic 	
 			}
 
-			// TODO(santa): DSBCAPS_GETCURRENTPOSITION2	
+			// TODO(action): DSBCAPS_GETCURRENTPOSITION2	
 			DSBUFFERDESC BufferDescription = {};
 			BufferDescription.dwSize = sizeof(BufferDescription);
 			BufferDescription.dwFlags = 0;
@@ -271,12 +271,12 @@ Win32InitDSound(HWND Window,int32 SamplesPerSecond, int32 BufferSize)
 		}
 		else
 		{
-			// TODO(santa): Diagnostic
+			// TODO(action): Diagnostic
 		}
 	}
 	else
 	{
-		// TODO(santa): Diagnostic
+		// TODO(action): Diagnostic
 	}
 }
 
@@ -296,7 +296,7 @@ Win32GetWindowDimension(HWND Window)
 internal void
 Win32ResizeDIBSection(win32_offscreen_buffer *Buffer, int Width, int Height)
 {
-	//TODO(santa): Bulletproof this.
+	//TODO(action): Bulletproof this.
 
 	if (Buffer->Memory)
 	{
@@ -307,7 +307,7 @@ Win32ResizeDIBSection(win32_offscreen_buffer *Buffer, int Width, int Height)
     Buffer->Height    = Height;
 	int BytesPerPixel = 4;
 
-	// NOTE(santa): When the biHeight field is negative, this is the clue to
+	// NOTE(action): When the biHeight field is negative, this is the clue to
 	// Windows to treat this bitmap as top-down, not bottom-up, meaning that
 	// the first three bytes of the image are the color for the top left pixel
 	// int the bitmap, not the bottom left!
@@ -322,14 +322,14 @@ Win32ResizeDIBSection(win32_offscreen_buffer *Buffer, int Width, int Height)
     Buffer->Memory = VirtualAlloc(0, BitmapMemorySize, MEM_RESERVE|MEM_COMMIT, PAGE_READWRITE);
     Buffer->Pitch = Width * BytesPerPixel;
 
-	// TODO(santa): Probably clear this to black
+	// TODO(action): Probably clear this to black
 }	
 internal void
 Win32DisplayBufferInWindow(win32_offscreen_buffer *Buffer,
 						   HDC DeviceContext,int WindowWidth, int WindowHeight)
 {
-	// TODO(santa): Aspect ratio correction
-	// TODO(santa): Play with stretch modes
+	// TODO(action): Aspect ratio correction
+	// TODO(action): Play with stretch modes
 	StretchDIBits(DeviceContext,
 				  /*
 					X, Y, Width, Height,
@@ -354,13 +354,13 @@ Win32MainWindowCallback(HWND   Window,
 	{		
 		case WM_DESTROY:
 		{
-			// TODO(santa): Handle this as an error - recreate window?
+			// TODO(action): Handle this as an error - recreate window?
 			GlobalRunning = false;
 		} break;
 		
 		case WM_CLOSE:
 		{
-			// TODO(santa): Handle this with a message to the user?
+			// TODO(action): Handle this with a message to the user?
 			GlobalRunning = false;
 		} break;
 		
@@ -414,7 +414,7 @@ Win32ClearBuffer(win32_sound_output *SoundOutput)
 											 &Region2, &Region2Size,
 											 0)))
 	{
-		// TODO(santa): assert that Region1Size/Region2Size is valid
+		// TODO(action): assert that Region1Size/Region2Size is valid
 		uint8 *DestSample = (uint8 *)Region1;
 		for(DWORD ByteIndex = 0; ByteIndex < Region1Size; ++ByteIndex)
 		{
@@ -435,7 +435,7 @@ internal void
 Win32FillSoundBuffer(win32_sound_output *SoundOutput, DWORD ByteToLock, DWORD BytesToWrite,
 					 game_sound_output_buffer *SourceBuffer)
 {
-	// TODO(santa): More strenuous test!
+	// TODO(action): More strenuous test!
 	VOID *Region1;
 	DWORD Region1Size;
 	VOID *Region2;
@@ -445,7 +445,7 @@ Win32FillSoundBuffer(win32_sound_output *SoundOutput, DWORD ByteToLock, DWORD By
 											 &Region2, &Region2Size,
 											 0)))
 	{
-		// TODO(santa): assert that Region1Size/Region2Size is valid
+		// TODO(action): assert that Region1Size/Region2Size is valid
 
 		// TODO(sants): Collapse these two loops
 		DWORD Region1SampleCount = Region1Size / SoundOutput->BytesPerSample;
@@ -635,14 +635,14 @@ WinMain(HINSTANCE Instance,
 			    		   0); 
 		if (Window)
 		{
-			// NOTE(santa): Since we specified CS_OWNDC, we can just
+			// NOTE(action): Since we specified CS_OWNDC, we can just
 			// get one device context and use it forever because we
 			// are not sharing it with anyone.
 			HDC DeviceContext = GetDC(Window);
 
 			win32_sound_output SoundOutput = {};
 
-			// TODO(santa): Make this like sixty seconds?
+			// TODO(action): Make this like sixty seconds?
 			SoundOutput.SamplesPerSecond = 48000;
 			SoundOutput.BytesPerSample = sizeof(int16) * 2;
 			SoundOutput.SecondaryBufferSize = SoundOutput.SamplesPerSecond * SoundOutput.BytesPerSample;
@@ -697,7 +697,7 @@ WinMain(HINSTANCE Instance,
 
 					Win32ProcessPendingMessages(NewKeyboardController);
 
-					// TODO(santa): Should we poll this more frequently
+					// TODO(action): Should we poll this more frequently
 					DWORD MaxControllerCount = XUSER_MAX_COUNT;
 					if(MaxControllerCount > (ArrayCount(NewInput->Controllers) - 1))
 					{
@@ -719,8 +719,8 @@ WinMain(HINSTANCE Instance,
 						{
 							NewController->IsConnected = true;
 
-							// NOTE(santa): This controller is plugged in
-							// TODO(santa): See if ControllerState.dwPacketNumber increments too rapidly
+							// NOTE(action): This controller is plugged in
+							// TODO(action): See if ControllerState.dwPacketNumber increments too rapidly
 							XINPUT_GAMEPAD *Pad = &ControllerState.Gamepad;
 
 							NewController->StickAverageX = Win32ProcessXInputStickValue(
@@ -810,7 +810,7 @@ WinMain(HINSTANCE Instance,
 						}			 
 						else
 						{
-							// NOTE(santa): The controller is not available
+							// NOTE(action): The controller is not available
 							NewController->IsConnected = false;
 						}
 					}
@@ -821,7 +821,7 @@ WinMain(HINSTANCE Instance,
 					DWORD PlayCursor    = 0;
 					DWORD WriteCursor   = 0;
 					bool32 SoundIsValid = false;
-					// TODO(santa): Tighten up sound so that we know where we should be
+					// TODO(action): Tighten up sound so that we know where we should be
 					// writing to and can anticipate the time spent in the game update.
 					if(SUCCEEDED(GlobalSecondaryBuffer->GetCurrentPosition(&PlayCursor, &WriteCursor)))
 					{
@@ -856,7 +856,7 @@ WinMain(HINSTANCE Instance,
 					Buffer.Pitch  = GlobalBackbuffer.Pitch;
 					GameUpdateAndRender(&GameMemory, NewInput, &Buffer, &SoundBuffer);
 
-					// NOTE(santa): DirectSound output test
+					// NOTE(action): DirectSound output test
 					if(SoundIsValid)
 					{					
 						Win32FillSoundBuffer(&SoundOutput, ByteToLock, BytesToWrite, &SoundBuffer);
@@ -871,7 +871,7 @@ WinMain(HINSTANCE Instance,
 					LARGE_INTEGER EndCounter;
 					QueryPerformanceCounter(&EndCounter);
 
-					// TODO(santa): Display the value here
+					// TODO(action): Display the value here
 					uint64 CyclesElapsed = EndCycleCount - LastCycleCount;
 					int64 CounterElapsed = EndCounter.QuadPart - LastCounter.QuadPart;
 					real64 MSPerFrame = ((1000.0f * (real64)CounterElapsed) / (real64)PerfCountFrequency);
@@ -890,22 +890,22 @@ WinMain(HINSTANCE Instance,
 					game_input *Temp = NewInput;
 					NewInput = OldInput;
 					OldInput = Temp;
-					// TODO(santa): Should I clear these here?
+					// TODO(action): Should I clear these here?
 				}
 			}
 			else
 			{
-				// TODO(santa): Logging
+				// TODO(action): Logging
 			}
 		}
 		else
 		{
-			// TODO(santa): Logging
+			// TODO(action): Logging
 		}
 	}
 	else
 	{
-		// TODO(santa): Logging
+		// TODO(action): Logging
 	}
 	 
     return(0);
