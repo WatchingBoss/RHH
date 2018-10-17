@@ -1,5 +1,9 @@
 #include <iostream>
 
-#include <SFML/Graphics.hpp>
+#include "../inc/game.hpp"
 
-int main( ) { return 0; }
+int main( ) {
+	Engine::Game main_game( 1024, 720, "Like a Flappy bird" );
+
+	return 0;
+}

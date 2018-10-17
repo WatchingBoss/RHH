@@ -2,7 +2,7 @@ cmake_minimum_required (VERSION 3.6)
 
 project (flappy)
 
-set( CMAKE_BUILD_TYPE Debug CACHE STRING "Choose the type of build (Debug or Release)" FORCE)
+set( CMAKE_BUILD_TYPE Debug )
 
 find_package(OpenGL REQUIRED)
 
@@ -26,7 +26,7 @@ set( SFML_DIR "${THIRD_PART_LIBS}/SFML/lib/cmake/SFML" )
 set( SFML_STATIC_LIBRARIES TRUE )
 find_package(SFML COMPONENTS network audio graphics window system REQUIRED)
 if(SFML_FOUND)
-set( SFML_LINKS "sfml-graphics" )
+set( SFML_LINKS "sfml-graphics" "sfml-window" )
 endif()
 
 file(GLOB PROJECT_SOURCES ${PROJECT_SOURCE_DIR}/src/*.cpp)
