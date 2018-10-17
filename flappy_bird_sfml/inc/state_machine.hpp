@@ -20,7 +20,7 @@ class StateMachine {
 
 	void ProcessStateChanges( );
 
-	inline stateRef &GetActiveState( ) { return m_States.top( ); }
+	stateRef &GetActiveState();
 
   private:
 	std::stack<stateRef> m_States;

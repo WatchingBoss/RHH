@@ -1,4 +1,5 @@
 #include "../inc/state_machine.hpp"
+#include <iostream>
 
 namespace Engine
 {
@@ -7,7 +8,7 @@ StateMachine::StateMachine( )
 
 StateMachine::~StateMachine( ) {}
 
-void StateMachine::AddState( stateRef new_state, bool is_replacing) {
+void StateMachine::AddState( stateRef new_state, bool is_replacing ) {
 	m_isAdding    = true;
 	m_isReplacing = is_replacing;
 	m_NewState    = std::move( new_state );
@@ -36,4 +37,13 @@ void StateMachine::ProcessStateChanges( ) {
 		m_isAdding = false;
 	}
 }
-}  // namespace Flappy
+
+stateRef &StateMachine::GetActiveState( ) {
+	if ( m_States.empty( ) ) {
+		std::cout << "No states in stack" << std::endl;
+		exit(EXIT_FAILURE);
+	}
+	return m_States.top( );
+}
+
+}  // namespace Engine

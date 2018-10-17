@@ -1,6 +1,7 @@
 #include <iostream>
 
 #include "../inc/game.hpp"
+#include "../inc/splash_state.hpp"
 
 namespace Engine
 {
@@ -8,8 +9,8 @@ Game::Game( int width, int height, const char *title )
     : m_FrameTime( 1.f / 60.f ), m_Clock( ) {
 	m_Data->window.create( sf::VideoMode( width, height ), title,
 	                       sf::Style::Close | sf::Style::Titlebar );
-
-//	TODO: Add state to stack in machine object
+	m_Data->machine.AddState( stateRef( new SplashState( m_Data ) ) );
+//	m_Data->machine.AddState( std::makeunique<SplashState(m_Data)>);
 
 	RunGame( );
 }
@@ -19,8 +20,6 @@ Game::~Game( ) {}
 void Game::RunGame( ) {
 	float current_time = m_Clock.getElapsedTime( ).asSeconds( );
 	float accumulator  = 0.f;
-
-	int number = 0;
 
 	while ( m_Data->window.isOpen( ) ) {
 		m_Data->machine.ProcessStateChanges( );
@@ -40,9 +39,7 @@ void Game::RunGame( ) {
 		}
 
 		float interpolation = accumulator / m_FrameTime;
-		m_Data->machine.GetActiveState( )->Update( interpolation );
-
-		std::printf("Iteration of game loop: %d\n", ++number);
+		m_Data->machine.GetActiveState( )->Draw( interpolation );
 	}
 }
 }  // namespace Engine
