@@ -1,7 +1,7 @@
 #ifndef MY_STATE_HPP
 #define MY_STATE_HPP
 
-namespace Flappy
+namespace Engine
 {
 class State {
   public:
@@ -14,6 +14,6 @@ class State {
 	virtual void Pause( ) {}
 	virtual void Resume( ) {}
 };
-}  // namespace Flappy
+}  // namespace Engine
 
 #endif

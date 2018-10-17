@@ -6,7 +6,7 @@
 
 #include "state.hpp"
 
-namespace Flappy
+namespace Engine
 {
 using stateRef = std::unique_ptr<State>;
 
@@ -15,8 +15,19 @@ class StateMachine {
 	StateMachine( );
 	~StateMachine( );
 
-	void AddState( stateRef, bool = true );
+	void        AddState( stateRef, bool = true );
+	inline void RemoveState( ) { m_isRemoving = true; }
+
+	void ProcessStateChanges( );
+
+	inline stateRef &GetActiveState( ) { return m_States.top( ); }
+
+  private:
+	std::stack<stateRef> m_States;
+	stateRef             m_NewState;
+
+	bool m_isRemoving, m_isAdding, m_isReplacing;
 };
-}  // namespace Flappy
+}  // namespace Engine
 
 #endif
