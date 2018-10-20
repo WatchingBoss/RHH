@@ -11,9 +11,9 @@ class InputManager {
 	InputManager( );
 	~InputManager( );
 
-	bool IsSpriteClicked( sf::Sprite &, sf::Mouse::Button &, sf::RenderWindow & );
+	static bool IsSpriteClicked( sf::Sprite &, const sf::Mouse::Button &, sf::RenderWindow & );
 
-	inline sf::Vector2i GetMousePosition( sf::RenderWindow &window ) {
+	static inline sf::Vector2i GetMousePosition( sf::RenderWindow &window ) {
 		return sf::Mouse::getPosition( window );
 	}
 };

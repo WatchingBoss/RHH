@@ -24,7 +24,6 @@ class SplashState : public State {
 	gameDataRef m_Data;
 	sf::Clock m_Clock;
 
-	sf::Texture m_BgTexture;
 	sf::Sprite m_Bg;
 };
 }  // namespace Engine

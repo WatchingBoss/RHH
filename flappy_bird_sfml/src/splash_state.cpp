@@ -1,4 +1,5 @@
 #include "../inc/splash_state.hpp"
+#include "../inc/main_menu_state.hpp"
 
 #include <iostream>
 #include <sstream>
@@ -16,21 +17,19 @@ void SplashState::Init( ) {
 
 void SplashState::HandleInput( ) {
 	sf::Event event;
-	while(m_Data->window.pollEvent(event)){
-		if(sf::Event::Closed == event.type)
-			m_Data->window.close();
-	}
+	while ( m_Data->window.pollEvent( event ) )
+		if ( sf::Event::Closed == event.type ) m_Data->window.close( );
 }
 
 void SplashState::Update( float frame_time ) {
 	if ( m_Clock.getElapsedTime( ).asSeconds( ) > SPLASH_STATE_SHOW_TIME )
-		std::cout << "Go to main menu" << std::endl;
+		m_Data->machine.AddState( std::make_unique<MainMenuState>( m_Data ), true );
 }
 
 void SplashState::Draw( float frame_time ) {
-	m_Data->window.clear();
-	m_Data->window.draw(m_Bg);
-	m_Data->window.display();
+	m_Data->window.clear( );
+	m_Data->window.draw( m_Bg );
+	m_Data->window.display( );
 }
 
 }  // namespace Engine

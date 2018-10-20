@@ -9,8 +9,7 @@ Game::Game( int width, int height, const char *title )
     : m_FrameTime( 1.f / 60.f ), m_Clock( ) {
 	m_Data->window.create( sf::VideoMode( width, height ), title,
 	                       sf::Style::Close | sf::Style::Titlebar );
-	m_Data->machine.AddState( stateRef( new SplashState( m_Data ) ) );
-//	m_Data->machine.AddState( std::makeunique<SplashState(m_Data)>);
+	m_Data->machine.AddState( std::make_unique<SplashState>( m_Data ) );
 
 	RunGame( );
 }
