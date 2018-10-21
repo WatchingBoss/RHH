@@ -8,6 +8,7 @@
 #include "pipe.hpp"
 #include "state.hpp"
 #include "land.hpp"
+#include "bird.hpp"
 
 namespace Engine
 {
@@ -33,6 +34,7 @@ class GameState : public State {
 
 	Pipe *m_Pipe;
 	Land *m_Land;
+	Bird *m_Bird;
 
   private:
 	void AddTexture( const char *, const char *, sf::Sprite &);

@@ -16,14 +16,22 @@ void GameState::Init( ) {
 	LoadTexture( "pipe_down", PIPE_DOWN_FILE_PATH );
 	LoadTexture( "land", LAND_FILE_PATH );
 
+	LoadTexture( "bird_frame_1", BIRD_FRAME_1_FILE_PATH );
+	LoadTexture( "bird_frame_2", BIRD_FRAME_2_FILE_PATH );
+	LoadTexture( "bird_frame_3", BIRD_FRAME_3_FILE_PATH );
+	LoadTexture( "bird_frame_4", BIRD_FRAME_4_FILE_PATH );
+
 	m_Pipe = new Pipe( m_Data );
 	m_Land = new Land( m_Data );
+	m_Bird = new Bird( m_Data );
 }
 
 void GameState::HandleInput( ) {
 	sf::Event event;
 	while ( m_Data->window.pollEvent( event ) ) {
 		if ( sf::Event::Closed == event.type ) m_Data->window.close( );
+		if ( sf::Event::KeyPressed == event.type )
+			if ( event.key.code == sf::Keyboard::Space ) m_Bird->Tap( );
 	}
 }
 
@@ -39,6 +47,9 @@ void GameState::Update( float frame_time ) {
 
 		m_Clock.restart( );
 	}
+
+	m_Bird->Animate( frame_time );
+	m_Bird->Update( frame_time );
 }
 
 void GameState::Draw( float frame_time ) {
@@ -47,6 +58,7 @@ void GameState::Draw( float frame_time ) {
 	m_Data->window.draw( m_Bg );
 	m_Pipe->DrawPipes( );
 	m_Land->DrawLand( );
+	m_Bird->DrawBird( );
 
 	m_Data->window.display( );
 }
