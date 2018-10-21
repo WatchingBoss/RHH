@@ -45,7 +45,6 @@ void Pipe::SpawnInvisiblePipe( const float y_offset ) {
 }
 
 void Pipe::MovePipes( const float frame_time ) {
-	int i = 0;
 	for ( sf::Sprite &pipe : m_PipeSprites ) {
 		sf::Vector2f pos      = pipe.getPosition( );
 		float        movement = PIPE_MOVEMENT_SPEED * frame_time;

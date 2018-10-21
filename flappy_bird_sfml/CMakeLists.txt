@@ -22,11 +22,13 @@ endif()
 include_directories (${THIRD_PART_LIBS})
 
 # SFML
-set( SFML_DIR "${THIRD_PART_LIBS}/SFML/lib/cmake/SFML" )
-set( SFML_STATIC_LIBRARIES TRUE )
-find_package(SFML COMPONENTS network audio graphics window system REQUIRED)
+if(MSVC)
+  set( SFML_DIR "${THIRD_PART_LIBS}/SFML/lib/cmake/SFML" )
+endif()
+#set( SFML_STATIC_LIBRARIES TRUE )
+find_package(SFML 2 COMPONENTS network audio graphics window system REQUIRED)
 if(SFML_FOUND)
-set( SFML_LINKS "sfml-graphics" "sfml-window" )
+set( SFML_LINKS "sfml-graphics" "sfml-window" "sfml-system")
 endif()
 
 file(GLOB PROJECT_SOURCES ${PROJECT_SOURCE_DIR}/src/*.cpp)

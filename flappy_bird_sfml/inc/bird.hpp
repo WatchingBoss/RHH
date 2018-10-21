@@ -26,11 +26,11 @@ class Bird {
 
 	sf::Clock m_Clock, m_MovementClock;
 
-	BIRD_STATE m_BirdState;
-
+	int                        m_AnimationIterator;
 	sf::Sprite                 m_BirdSprite;
 	std::array<sf::Texture, 4> m_BirdAnimation;
-	int                        m_AnimationIterator;
+
+	BIRD_STATE m_BirdState;
 
   private:
 	void FillTextures( );
