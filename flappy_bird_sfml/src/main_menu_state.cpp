@@ -1,7 +1,9 @@
 #include "../inc/main_menu_state.hpp"
+#include "../inc/game_state.hpp"
 
 #include <iostream>
 #include <sstream>
+#include <memory>
 
 namespace Engine
 {
@@ -30,9 +32,8 @@ void MainMenuState::HandleInput( ) {
 	while ( m_Data->window.pollEvent( event ) ) {
 		if ( sf::Event::Closed == event.type ) m_Data->window.close( );
 		if ( m_Data->input.IsSpriteClicked( m_PlayButton, sf::Mouse::Left,
-		                                    m_Data->window ) ) {
-			printf( "Button clicked!!!\n" );
-		}
+		                                    m_Data->window ) )
+			m_Data->machine.AddState(std::make_unique<GameState>(m_Data), true);
 	}
 }
 

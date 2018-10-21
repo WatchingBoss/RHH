@@ -12,7 +12,6 @@ bool InputManager::IsSpriteClicked( sf::Sprite &obj, const sf::Mouse::Button &bu
 		sf::Vector2i  mouse_pos = sf::Mouse::getPosition( window );
 		if ( temp_rect.contains( static_cast<float>( mouse_pos.x ),
 		                         static_cast<float>( mouse_pos.y ) ) ) {
-			printf( "Inside condition\n" );
 			return true;
 		}
 	}

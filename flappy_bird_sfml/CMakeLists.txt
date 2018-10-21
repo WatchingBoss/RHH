@@ -30,7 +30,7 @@ set( SFML_LINKS "sfml-graphics" "sfml-window" )
 endif()
 
 file(GLOB PROJECT_SOURCES ${PROJECT_SOURCE_DIR}/src/*.cpp)
-file(GLOB PROJECT_HEADERS ${PROJECT_SOURCE_DIR}/inc/*.hpp)
+file(GLOB PROJECT_HEADERS ${PROJECT_SOURCE_DIR}/inc/*.hpp ${PROJECT_SOURCE_DIR}/inc/*.h)
 
 source_group("Sources" FILES ${PROJECT_SOURCES})
 source_group("Headers" FILES ${PROJECT_HEADERS})
