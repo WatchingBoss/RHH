@@ -6,7 +6,8 @@ Land::Land( gameDataRef data ) : m_Data( data ) {
 	sf::Sprite land_1( m_Data->asset.GetTexture( "land" ) );
 	sf::Sprite land_2( m_Data->asset.GetTexture( "land" ) );
 
-	land_1.setPosition( 0, m_Data->window.getSize( ).y - land_1.getGlobalBounds( ).height );
+	land_1.setPosition( 0,
+	                    m_Data->window.getSize( ).y - land_1.getGlobalBounds( ).height );
 	land_2.setPosition( land_1.getGlobalBounds( ).width,
 	                    m_Data->window.getSize( ).y - land_1.getGlobalBounds( ).height );
 
@@ -27,6 +28,10 @@ void Land::MoveLand( const float frame_time ) {
 			land.setPosition( pos );
 		}
 	}
+}
+
+const std::array<sf::Sprite, LAND_NUM> &Land::GetSprites( ) const {
+	return m_LandSprites;
 }
 
 void Land::DrawLand( ) {

@@ -1,5 +1,5 @@
-#include "../inc/game_state.hpp"
 #include "../inc/game_over_state.hpp"
+#include "../inc/game_state.hpp"
 
 #include <iostream>
 #include <memory>
@@ -7,8 +7,12 @@
 
 namespace Engine
 {
-GameState::GameState( gameDataRef data ) : m_Data( data ), m_GameOver( false ) {}
-GameState::~GameState( ) {}
+GameState::GameState( gameDataRef data ) : m_Data( data ), m_GameState( READY ) {}
+GameState::~GameState( ) {
+	delete ( m_Pipe );
+	delete ( m_Land );
+	delete ( m_Bird );
+}
 
 void GameState::Init( ) {
 	AddTexture( "game_state_bg", GAME_BG_FILE_PATH, m_Bg );
@@ -24,6 +28,8 @@ void GameState::Init( ) {
 	m_Pipe = new Pipe( m_Data );
 	m_Land = new Land( m_Data );
 	m_Bird = new Bird( m_Data );
+
+	m_Collision = Collision( );
 }
 
 void GameState::HandleInput( ) {
@@ -31,24 +37,40 @@ void GameState::HandleInput( ) {
 	while ( m_Data->window.pollEvent( event ) ) {
 		if ( sf::Event::Closed == event.type ) m_Data->window.close( );
 		if ( sf::Event::KeyPressed == event.type )
-			if ( event.key.code == sf::Keyboard::Space ) m_Bird->Tap( );
+			if ( event.key.code == sf::Keyboard::Space ) {
+				if ( m_GameState != GAMEOVER ) {
+					m_Bird->Tap( );
+					if ( m_GameState != PLAYING ) m_GameState = PLAYING;
+				}
+			}
 	}
 }
 
 void GameState::Update( float frame_time ) {
-	if ( m_GameOver )
-		m_Data->machine.AddState( std::make_unique<GameOverState>( m_Data ), true );
+	// if ( m_GameState == GAMEOVER )
+	//	m_Data->machine.AddState( std::make_unique<GameOverState>( m_Data ), true );
 
-	m_Pipe->MovePipes( frame_time );
-	m_Land->MoveLand( frame_time );
-
-	if ( m_Clock.getElapsedTime( ).asSeconds( ) > PIPE_SPAWN_FREQ ) {
-		m_Pipe->SpawnPipes( );
-
-		m_Clock.restart( );
+	if ( m_GameState != GAMEOVER ) {
+		m_Land->MoveLand( frame_time );
+		m_Bird->Animate( frame_time );
 	}
 
-	m_Bird->Animate( frame_time );
+	if ( m_GameState == PLAYING ) {
+		m_Pipe->MovePipes( frame_time );
+
+		if ( m_Clock.getElapsedTime( ).asSeconds( ) > PIPE_SPAWN_FREQ ) {
+			m_Pipe->SpawnPipes( );
+			m_Clock.restart( );
+		}
+	}
+
+	for ( const sf::Sprite &land : m_Land->GetSprites( ) ) {
+		if ( m_Collision.ChechSpritesCollision( m_Bird->GetSprite( ), land ) ) {
+			m_GameState = GAMEOVER;
+			m_Bird->StopTheBird( );
+		}
+	}
+
 	m_Bird->Update( frame_time );
 }
 

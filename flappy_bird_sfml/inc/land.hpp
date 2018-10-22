@@ -5,24 +5,28 @@
 
 #include <array>
 
-#include "game.hpp"
 #include "definitions.h"
+#include "game.hpp"
 
-namespace Engine{
-class Land{
+constexpr int LAND_NUM = 2;
+
+namespace Engine
+{
+class Land {
   public:
-	Land(gameDataRef);
-	~Land();
+	Land( gameDataRef );
+	~Land( );
 
-	void MoveLand(const float);
-	void DrawLand();
+	void MoveLand( const float );
+	void DrawLand( );
+
+	const std::array<sf::Sprite, LAND_NUM> &GetSprites( ) const;
 
   private:
 	gameDataRef m_Data;
 
-	std::array<sf::Sprite, 2> m_LandSprites;
-	
+	std::array<sf::Sprite, LAND_NUM> m_LandSprites;
 };
-}
+}  // namespace Engine
 
 #endif

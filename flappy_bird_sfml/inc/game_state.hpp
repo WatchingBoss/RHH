@@ -4,6 +4,7 @@
 #include <SFML/Graphics.hpp>
 
 #include "bird.hpp"
+#include "collision.hpp"
 #include "definitions.h"
 #include "game.hpp"
 #include "land.hpp"
@@ -26,15 +27,17 @@ class GameState : public State {
   private:
 	gameDataRef m_Data;
 
-	sf::Clock m_Clock;
+	eGAME_STATE m_GameState;
 
-	bool m_GameOver;
+	sf::Clock m_Clock;
 
 	sf::Sprite m_Bg;
 
 	Pipe *m_Pipe;
 	Land *m_Land;
 	Bird *m_Bird;
+
+	Collision m_Collision;
 
   private:
 	void AddTexture( const char *, const char *, sf::Sprite & );

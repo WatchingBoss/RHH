@@ -21,6 +21,10 @@ class Bird {
 	void Update( const float );
 	void Tap( );
 
+	inline void StopTheBird( ) { m_BirdState = STILL; }
+
+	const sf::Sprite &GetSprite( ) const;
+
   private:
 	gameDataRef m_Data;
 
@@ -31,6 +35,8 @@ class Bird {
 	std::array<sf::Texture, 4> m_BirdAnimation;
 
 	BIRD_STATE m_BirdState;
+
+	float m_Rotation;
 
   private:
 	void FillTextures( );
