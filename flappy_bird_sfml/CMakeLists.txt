@@ -23,12 +23,13 @@ include_directories (${THIRD_PART_LIBS})
 
 # SFML
 if(MSVC)
-  set( SFML_DIR "${THIRD_PART_LIBS}/SFML/lib/cmake/SFML" )
+set( SFML_DIR "${THIRD_PART_LIBS}/SFML/lib/cmake/SFML" )
+set( SFML_STATIC_LIBRARIES TRUE	)
 endif()
-#set( SFML_STATIC_LIBRARIES TRUE )
+
 find_package(SFML 2 COMPONENTS network audio graphics window system REQUIRED)
 if(SFML_FOUND)
-set( SFML_LINKS "sfml-graphics" "sfml-window" "sfml-system")
+set( SFML_LINKS	"sfml-graphics"	"sfml-window" "sfml-system")
 endif()
 
 file(GLOB PROJECT_SOURCES ${PROJECT_SOURCE_DIR}/src/*.cpp)
@@ -39,3 +40,7 @@ source_group("Headers" FILES ${PROJECT_HEADERS})
 
 add_executable ( ${PROJECT_NAME} ${PROJECT_SOURCES} ${PROJECT_HEADERS} )
 target_link_libraries ( ${PROJECT_NAME} ${SFML_LINKS} )
+
+if(MSVC)
+file( COPY ${CMAKE_CURRENT_SOURCE_DIR}/res/	DESTINATION	${CMAKE_CURRENT_BINARY_DIR}/../res)
+endif()

@@ -3,12 +3,12 @@
 
 #include <SFML/Graphics.hpp>
 
+#include "bird.hpp"
 #include "definitions.h"
 #include "game.hpp"
+#include "land.hpp"
 #include "pipe.hpp"
 #include "state.hpp"
-#include "land.hpp"
-#include "bird.hpp"
 
 namespace Engine
 {
@@ -37,8 +37,8 @@ class GameState : public State {
 	Bird *m_Bird;
 
   private:
-	void AddTexture( const char *, const char *, sf::Sprite &);
-	void LoadTexture( const char *, const char *);
+	void AddTexture( const char *, const char *, sf::Sprite & );
+	void LoadTexture( const char *, const char * );
 };
 }  // namespace Engine
 
