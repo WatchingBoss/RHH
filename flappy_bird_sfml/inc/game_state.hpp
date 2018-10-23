@@ -41,12 +41,16 @@ class GameState : public State {
 
 	Collision m_Collision;
 
+	uint32 m_Score;
+
 	bool m_BirdOnLand;
 
   private:
 	void AddTexture( const char *, const char *, sf::Sprite & );
 	void LoadTexture( const char *, const char * );
+	bool CheckScore( );
 	bool CheckCollision( );
+	void UpdateScore( );
 };
 }  // namespace Engine
 

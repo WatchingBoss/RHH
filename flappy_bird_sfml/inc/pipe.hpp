@@ -21,10 +21,16 @@ class Pipe {
 	void Draw( );
 
 	inline const std::deque<sf::Sprite> &GetSprites( ) const { return m_PipeSprites; }
+	inline const std::deque<sf::Sprite> &GetScoreSprites( ) const {
+		return m_ScoreSprites;
+	}
+	inline void PopScorePipe( ) { m_ScoreSprites.pop_front( ); }
 
   private:
-	gameDataRef            m_Data;
+	gameDataRef m_Data;
+
 	std::deque<sf::Sprite> m_PipeSprites;
+	std::deque<sf::Sprite> m_ScoreSprites;
 
 	std::random_device              m_Device;
 	std::mt19937                    m_Gen;
@@ -34,6 +40,7 @@ class Pipe {
 	void SpawnBottomPipe( const float );
 	void SpawnTopPipe( const float );
 	void SpawnInvisiblePipe( const float );
+	void SpawnScoringPipe( );
 
 	inline float PipeSpawnOffsetY( ) { return static_cast<float>( m_Range( m_Gen ) ); }
 };

@@ -25,6 +25,7 @@ inline constexpr float SPLASH_STATE_SHOW_TIME = 0.5f;
 #define PIPE_UP_FILE_PATH _base_path "/res/pipe_up.png"
 #define PIPE_DOWN_FILE_PATH _base_path "/res/pipe_down.png"
 #define LAND_FILE_PATH _base_path "/res/land.png"
+#define INVISIBLE_PIPE_FILE_PATH _base_path "/res/pipe_score_test.png"
 
 inline constexpr float PIPE_MOVEMENT_SPEED = 200.f;
 inline constexpr float PIPE_SPAWN_FREQ     = 2.0f;

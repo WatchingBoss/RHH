@@ -17,16 +17,20 @@ void Pipe::Spawn( ) {
 	SpawnBottomPipe( y_offset );
 	SpawnTopPipe( y_offset );
 	SpawnInvisiblePipe( y_offset );
+
+	SpawnScoringPipe( );
 }
 
 void Pipe::Move( const float frame_time ) {
-	for ( sf::Sprite &pipe : m_PipeSprites ) {
-		sf::Vector2f pos      = pipe.getPosition( );
-		float        movement = PIPE_MOVEMENT_SPEED * frame_time;
-		pipe.move( -movement, 0 );
+	const float movement = -PIPE_MOVEMENT_SPEED * frame_time;
 
-		if ( pos.x < -pipe.getGlobalBounds( ).width ) m_PipeSprites.pop_front( );
+	for ( sf::Sprite &pipe : m_PipeSprites ) {
+		pipe.move( movement, 0 );
+		if ( pipe.getPosition( ).x < -pipe.getGlobalBounds( ).width )
+			m_PipeSprites.pop_front( );
 	}
+
+	for ( sf::Sprite &pipe : m_ScoreSprites ) pipe.move( movement, 0 );
 }
 
 void Pipe::Draw( ) {
@@ -40,12 +44,14 @@ void Pipe::SpawnBottomPipe( const float y_offset ) {
 	sprite.setPosition( static_cast<float>( m_Data->window.getSize( ).x ),
 	                    m_Data->window.getSize( ).y - sprite.getGlobalBounds( ).height -
 	                        y_offset );
+
 	m_PipeSprites.push_back( sprite );
 }
 
 void Pipe::SpawnTopPipe( const float y_offset ) {
 	sf::Sprite sprite( m_Data->asset.GetTexture( "pipe_down" ) );
 	sprite.setPosition( static_cast<float>( m_Data->window.getSize( ).x ), -y_offset );
+
 	m_PipeSprites.push_back( sprite );
 }
 
@@ -58,6 +64,13 @@ void Pipe::SpawnInvisiblePipe( const float y_offset ) {
 	sprite.setColor( sf::Color( 0, 0, 0, 0 ) );
 
 	m_PipeSprites.push_back( sprite );
+}
+
+void Pipe::SpawnScoringPipe( ) {
+	sf::Sprite sprite( m_Data->asset.GetTexture( "score_pipe" ) );
+	sprite.setPosition( static_cast<float>( m_Data->window.getSize( ).x ), 0 );
+
+	m_ScoreSprites.push_back( sprite );
 }
 
 }  // namespace Engine

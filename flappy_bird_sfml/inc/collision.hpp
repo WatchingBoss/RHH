@@ -9,8 +9,8 @@ class Collision {
   public:
 	Collision( );
 
-	bool ChechSpritesCollision( const sf::Sprite &, const sf::Sprite & );
-	bool ChechSpritesCollision( sf::Sprite, const float, sf::Sprite, const float );
+	bool CheckSpritesCollision( const sf::Sprite &, const sf::Sprite & );
+	bool CheckSpritesCollision( sf::Sprite, const float, sf::Sprite, const float );
 };
 }  // namespace Engine
 

@@ -8,7 +8,7 @@
 namespace Engine
 {
 GameState::GameState( gameDataRef data )
-    : m_Data( data ), m_GameState( READY ), m_BirdOnLand( false ) {}
+    : m_Data( data ), m_GameState( READY ), m_BirdOnLand( false ), m_Score( 0 ) {}
 GameState::~GameState( ) {
 	delete ( m_Pipe );
 	delete ( m_Land );
@@ -21,6 +21,7 @@ void GameState::Init( ) {
 	LoadTexture( "pipe_up", PIPE_UP_FILE_PATH );
 	LoadTexture( "pipe_down", PIPE_DOWN_FILE_PATH );
 	LoadTexture( "land", LAND_FILE_PATH );
+	LoadTexture( "score_pipe", INVISIBLE_PIPE_FILE_PATH );
 
 	LoadTexture( "bird_frame_1", BIRD_FRAME_1_FILE_PATH );
 	LoadTexture( "bird_frame_2", BIRD_FRAME_2_FILE_PATH );
@@ -63,7 +64,8 @@ void GameState::Update( float frame_time ) {
 		m_Land->Move( frame_time );
 		m_Bird->Animate( frame_time );
 
-		if ( CheckCollision( ) ) { m_GameState = GAMEOVER; }
+		if ( CheckCollision( ) ) m_GameState = GAMEOVER;
+		if ( CheckScore( ) ) UpdateScore( );
 	}
 
 	if ( m_GameState == PLAYING ) {
@@ -92,21 +94,42 @@ void GameState::Draw( float frame_time ) {
 
 /*** Private methods ***/
 
+bool GameState::CheckScore( ) {
+	if ( m_GameState == GAMEOVER ) return false;
+
+	const sf::Sprite bird_sprite = m_Bird->GetSprite( );
+
+	for ( const sf::Sprite &pipe : m_Pipe->GetScoreSprites( ) )
+		if ( m_Collision.CheckSpritesCollision( bird_sprite, pipe ) ) {
+			m_Pipe->PopScorePipe( );
+			return true;
+		}
+
+	return false;
+}
+
 bool GameState::CheckCollision( ) {
+	const sf::Sprite bird_sprite = m_Bird->GetSprite( );
+
 	for ( const sf::Sprite &land : m_Land->GetSprites( ) )
-		if ( m_Collision.ChechSpritesCollision( m_Bird->GetSprite( ),
-		                                        BIRD_COLLISION_SCALE, land, 1.f ) ) {
+		if ( m_Collision.CheckSpritesCollision( bird_sprite, BIRD_COLLISION_SCALE, land,
+		                                        1.f ) ) {
 			m_Bird->StopTheBird( );
 			m_BirdOnLand = true;
 			return true;
 		}
 
 	for ( const sf::Sprite &pipe : m_Pipe->GetSprites( ) )
-		if ( m_Collision.ChechSpritesCollision( m_Bird->GetSprite( ),
-		                                        BIRD_COLLISION_SCALE, pipe, 1.f ) )
+		if ( m_Collision.CheckSpritesCollision( bird_sprite, BIRD_COLLISION_SCALE, pipe,
+		                                        1.f ) )
 			return true;
 
 	return false;
+}
+
+void GameState::UpdateScore( ) {
+	++m_Score;
+	std::cout << "Current score: " << m_Score << "\n";
 }
 
 void GameState::AddTexture( const char *tex_name, const char *file_path,
