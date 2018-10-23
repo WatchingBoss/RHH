@@ -17,10 +17,12 @@ class Land {
 	Land( gameDataRef );
 	~Land( );
 
-	void MoveLand( const float );
-	void DrawLand( );
+	void Move( const float );
+	void Draw( );
 
-	const std::array<sf::Sprite, LAND_NUM> &GetSprites( ) const;
+	inline const std::array<sf::Sprite, LAND_NUM> &GetSprites( ) const {
+		return m_LandSprites;
+	}
 
   private:
 	gameDataRef m_Data;

@@ -6,6 +6,7 @@
 #include "bird.hpp"
 #include "collision.hpp"
 #include "definitions.h"
+#include "flash.hpp"
 #include "game.hpp"
 #include "land.hpp"
 #include "pipe.hpp"
@@ -33,15 +34,19 @@ class GameState : public State {
 
 	sf::Sprite m_Bg;
 
-	Pipe *m_Pipe;
-	Land *m_Land;
-	Bird *m_Bird;
+	Pipe * m_Pipe;
+	Land * m_Land;
+	Bird * m_Bird;
+	Flash *m_Flash;
 
 	Collision m_Collision;
+
+	bool m_BirdOnLand;
 
   private:
 	void AddTexture( const char *, const char *, sf::Sprite & );
 	void LoadTexture( const char *, const char * );
+	bool CheckCollision( );
 };
 }  // namespace Engine
 

@@ -1,7 +1,8 @@
 #ifndef MY_DEFINITIONS_H
 #define MY_DEFINITIONS_H
 
-typedef unsigned int uint32;
+typedef unsigned char uint8;
+typedef unsigned int  uint32;
 
 inline constexpr int MW_WIDTH  = 768;
 inline constexpr int MW_HEIGHT = 1000;
@@ -36,6 +37,8 @@ inline constexpr float PIPE_SPAWN_FREQ     = 2.0f;
 
 inline constexpr float BIRD_ANIMATION_DURATION = 0.4f;
 
+inline constexpr float BIRD_COLLISION_SCALE = 0.7f;
+
 enum BIRD_STATE { STILL = 1, FALLING = 2, FLYING = 3 };
 
 inline constexpr float GRAVITY         = 350.f;
@@ -45,5 +48,8 @@ inline constexpr float ROTATION_SPEED  = 100.f;
 
 /* Game states */
 enum eGAME_STATE { READY = 0, PLAYING = 1, GAMEOVER = 2 };
+
+/* Flush */
+inline constexpr float FLASH_SPEED = 1000.f;
 
 #endif

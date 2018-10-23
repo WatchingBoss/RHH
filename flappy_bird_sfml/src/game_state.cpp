@@ -7,11 +7,13 @@
 
 namespace Engine
 {
-GameState::GameState( gameDataRef data ) : m_Data( data ), m_GameState( READY ) {}
+GameState::GameState( gameDataRef data )
+    : m_Data( data ), m_GameState( READY ), m_BirdOnLand( false ) {}
 GameState::~GameState( ) {
 	delete ( m_Pipe );
 	delete ( m_Land );
 	delete ( m_Bird );
+	delete ( m_Flash );
 }
 
 void GameState::Init( ) {
@@ -25,9 +27,10 @@ void GameState::Init( ) {
 	LoadTexture( "bird_frame_3", BIRD_FRAME_3_FILE_PATH );
 	LoadTexture( "bird_frame_4", BIRD_FRAME_4_FILE_PATH );
 
-	m_Pipe = new Pipe( m_Data );
-	m_Land = new Land( m_Data );
-	m_Bird = new Bird( m_Data );
+	m_Pipe  = new Pipe( m_Data );
+	m_Land  = new Land( m_Data );
+	m_Bird  = new Bird( m_Data );
+	m_Flash = new Flash( m_Data );
 
 	m_Collision = Collision( );
 }
@@ -47,27 +50,28 @@ void GameState::HandleInput( ) {
 }
 
 void GameState::Update( float frame_time ) {
-	// if ( m_GameState == GAMEOVER )
-	//	m_Data->machine.AddState( std::make_unique<GameOverState>( m_Data ), true );
+	if ( m_GameState == GAMEOVER ) {
+		m_Flash->Show( frame_time );
+		if ( !m_BirdOnLand ) {
+			m_Bird->Animate( frame_time );
+			CheckCollision( );
+		}
+	}
+	//		m_Data->machine.AddState( std::make_unique<GameOverState>( m_Data ), true );
 
 	if ( m_GameState != GAMEOVER ) {
-		m_Land->MoveLand( frame_time );
+		m_Land->Move( frame_time );
 		m_Bird->Animate( frame_time );
+
+		if ( CheckCollision( ) ) { m_GameState = GAMEOVER; }
 	}
 
 	if ( m_GameState == PLAYING ) {
-		m_Pipe->MovePipes( frame_time );
+		m_Pipe->Move( frame_time );
 
 		if ( m_Clock.getElapsedTime( ).asSeconds( ) > PIPE_SPAWN_FREQ ) {
-			m_Pipe->SpawnPipes( );
+			m_Pipe->Spawn( );
 			m_Clock.restart( );
-		}
-	}
-
-	for ( const sf::Sprite &land : m_Land->GetSprites( ) ) {
-		if ( m_Collision.ChechSpritesCollision( m_Bird->GetSprite( ), land ) ) {
-			m_GameState = GAMEOVER;
-			m_Bird->StopTheBird( );
 		}
 	}
 
@@ -78,11 +82,31 @@ void GameState::Draw( float frame_time ) {
 	m_Data->window.clear( );
 
 	m_Data->window.draw( m_Bg );
-	m_Pipe->DrawPipes( );
-	m_Land->DrawLand( );
-	m_Bird->DrawBird( );
+	m_Pipe->Draw( );
+	m_Land->Draw( );
+	m_Bird->Draw( );
+	m_Flash->Draw( );
 
 	m_Data->window.display( );
+}
+
+/*** Private methods ***/
+
+bool GameState::CheckCollision( ) {
+	for ( const sf::Sprite &land : m_Land->GetSprites( ) )
+		if ( m_Collision.ChechSpritesCollision( m_Bird->GetSprite( ),
+		                                        BIRD_COLLISION_SCALE, land, 1.f ) ) {
+			m_Bird->StopTheBird( );
+			m_BirdOnLand = true;
+			return true;
+		}
+
+	for ( const sf::Sprite &pipe : m_Pipe->GetSprites( ) )
+		if ( m_Collision.ChechSpritesCollision( m_Bird->GetSprite( ),
+		                                        BIRD_COLLISION_SCALE, pipe, 1.f ) )
+			return true;
+
+	return false;
 }
 
 void GameState::AddTexture( const char *tex_name, const char *file_path,

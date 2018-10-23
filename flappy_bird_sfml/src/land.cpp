@@ -17,7 +17,7 @@ Land::Land( gameDataRef data ) : m_Data( data ) {
 
 Land::~Land( ) {}
 
-void Land::MoveLand( const float frame_time ) {
+void Land::Move( const float frame_time ) {
 	for ( sf::Sprite &land : m_LandSprites ) {
 		float movement = PIPE_MOVEMENT_SPEED * frame_time;
 		land.move( -movement, 0.f );
@@ -30,11 +30,7 @@ void Land::MoveLand( const float frame_time ) {
 	}
 }
 
-const std::array<sf::Sprite, LAND_NUM> &Land::GetSprites( ) const {
-	return m_LandSprites;
-}
-
-void Land::DrawLand( ) {
+void Land::Draw( ) {
 	for ( sf::Sprite &land : m_LandSprites ) m_Data->window.draw( land );
 }
 }  // namespace Engine

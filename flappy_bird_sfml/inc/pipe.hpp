@@ -15,10 +15,12 @@ class Pipe {
 	Pipe( gameDataRef );
 	~Pipe( );
 
-	void SpawnPipes( );
-	void MovePipes( const float );
+	void Spawn( );
+	void Move( const float );
 
-	void DrawPipes( );
+	void Draw( );
+
+	inline const std::deque<sf::Sprite> &GetSprites( ) const { return m_PipeSprites; }
 
   private:
 	gameDataRef            m_Data;

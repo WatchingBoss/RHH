@@ -17,15 +17,6 @@ Bird::Bird( gameDataRef data )
 
 Bird::~Bird( ) {}
 
-void Bird::FillTextures( ) {
-	for ( int i = 0; i < 4; ++i ) {
-		constexpr size_t name_size       = 15;
-		char             name[name_size] = { 0 };
-		std::snprintf( name, name_size, "bird_frame_%d", i + 1 );
-		m_BirdAnimation.at( i ) = m_Data->asset.GetTexture( name );
-	}
-}
-
 void Bird::Animate( const float frame_time ) {
 	const int frames_number = m_BirdAnimation.size( );
 	int &     a_iter        = m_AnimationIterator;  // Just make it shorter
@@ -65,7 +56,17 @@ void Bird::Tap( ) {
 	m_BirdState = FLYING;
 }
 
-const sf::Sprite &Bird::GetSprite( ) const { return m_BirdSprite; }
+void Bird::Draw( ) { m_Data->window.draw( m_BirdSprite ); }
 
-void Bird::DrawBird( ) { m_Data->window.draw( m_BirdSprite ); }
+/*** Private methods ***/
+
+void Bird::FillTextures( ) {
+	for ( int i = 0; i < 4; ++i ) {
+		constexpr size_t name_size       = 15;
+		char             name[name_size] = { 0 };
+		std::snprintf( name, name_size, "bird_frame_%d", i + 1 );
+		m_BirdAnimation.at( i ) = m_Data->asset.GetTexture( name );
+	}
+}
+
 }  // namespace Engine

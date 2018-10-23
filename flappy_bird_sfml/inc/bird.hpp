@@ -15,7 +15,7 @@ class Bird {
 	Bird( gameDataRef );
 	~Bird( );
 
-	void DrawBird( );
+	void Draw( );
 	void Animate( const float );
 
 	void Update( const float );
@@ -23,7 +23,7 @@ class Bird {
 
 	inline void StopTheBird( ) { m_BirdState = STILL; }
 
-	const sf::Sprite &GetSprite( ) const;
+	inline const sf::Sprite &GetSprite( ) const { return m_BirdSprite; }
 
   private:
 	gameDataRef m_Data;

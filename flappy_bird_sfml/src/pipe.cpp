@@ -1,23 +1,39 @@
-#include "../inc/pipe.hpp"
 #include "../inc/definitions.h"
+#include "../inc/pipe.hpp"
 
 namespace Engine
 {
 Pipe::Pipe( gameDataRef data ) : m_Data( data ), m_Gen( m_Device( ) ) {
 	int land_height = m_Data->asset.GetTexture( "land" ).getSize( ).y;
-	std::uniform_int_distribution<> range(0, land_height);
+	std::uniform_int_distribution<> range( 0, land_height );
 	m_Range = range;
 }
 
 Pipe::~Pipe( ) {}
 
-void Pipe::SpawnPipes( ) {
+void Pipe::Spawn( ) {
 	float y_offset = PipeSpawnOffsetY( );
 
 	SpawnBottomPipe( y_offset );
 	SpawnTopPipe( y_offset );
 	SpawnInvisiblePipe( y_offset );
 }
+
+void Pipe::Move( const float frame_time ) {
+	for ( sf::Sprite &pipe : m_PipeSprites ) {
+		sf::Vector2f pos      = pipe.getPosition( );
+		float        movement = PIPE_MOVEMENT_SPEED * frame_time;
+		pipe.move( -movement, 0 );
+
+		if ( pos.x < -pipe.getGlobalBounds( ).width ) m_PipeSprites.pop_front( );
+	}
+}
+
+void Pipe::Draw( ) {
+	for ( sf::Sprite &pipe : m_PipeSprites ) m_Data->window.draw( pipe );
+}
+
+/*** Private methods ***/
 
 void Pipe::SpawnBottomPipe( const float y_offset ) {
 	sf::Sprite sprite( m_Data->asset.GetTexture( "pipe_up" ) );
@@ -42,20 +58,6 @@ void Pipe::SpawnInvisiblePipe( const float y_offset ) {
 	sprite.setColor( sf::Color( 0, 0, 0, 0 ) );
 
 	m_PipeSprites.push_back( sprite );
-}
-
-void Pipe::MovePipes( const float frame_time ) {
-	for ( sf::Sprite &pipe : m_PipeSprites ) {
-		sf::Vector2f pos      = pipe.getPosition( );
-		float        movement = PIPE_MOVEMENT_SPEED * frame_time;
-		pipe.move( -movement, 0 );
-
-		if ( pos.x < -pipe.getGlobalBounds( ).width ) m_PipeSprites.pop_front( );
-	}
-}
-
-void Pipe::DrawPipes( ) {
-	for ( sf::Sprite &pipe : m_PipeSprites ) m_Data->window.draw( pipe );
 }
 
 }  // namespace Engine

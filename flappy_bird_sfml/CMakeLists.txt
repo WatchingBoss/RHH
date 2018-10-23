@@ -28,11 +28,7 @@ include_directories (${THIRD_PART_LIBS})
 # SFML
 if(MSVC)
 ## Set path to SFMLconfig.cmake file
-  if(NOT ${CMAKE_GENERATOR} MATCHES (Win64|IS64))
-    set( SFML_DIR "${THIRD_PART_LIBS}/SFML_64/lib/cmake/SFML" )
-  else()
-    set( SFML_DIR "${THIRD_PART_LIBS}/SFML_32/lib/cmake/SFML" )
-  endif(NOT ${CMAKE_GENERATOR} MATCHES (Win64|IS64))
+  set( SFML_DIR "${THIRD_PART_LIBS}/SFML/lib/cmake/SFML" )
   ## Winodws - static library, Linux - dynamic library
   set( SFML_STATIC_LIBRARIES TRUE )
 endif(MSVC)
