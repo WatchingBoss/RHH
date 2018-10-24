@@ -13,7 +13,7 @@ namespace Engine
 {
 class GameOverState : public State {
   public:
-	explicit GameOverState( gameDataRef );
+	explicit GameOverState( gameDataRef, uint32 );
 	~GameOverState( );
 
 	void Init( );
@@ -31,6 +31,10 @@ class GameOverState : public State {
 	void AddTexture( const char *, const char *, sf::Sprite & );
 	void LoadTexture( const char *, const char * );
 	void LoadFont( const char *, const char * );
+
+	uint32 m_Score, m_BestScore;
+
+	sf::Text m_ScoreText, m_BestScoreText;
 };
 }  // namespace Engine
 

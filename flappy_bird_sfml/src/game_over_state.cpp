@@ -6,7 +6,10 @@
 
 namespace Engine
 {
-GameOverState::GameOverState( gameDataRef data ) : m_Data( data ) {}
+GameOverState::GameOverState( gameDataRef data, uint32 score )
+    : m_Data( data ), m_Score( score ) {
+	if ( m_Score > m_BestScore ) m_BestScore = m_Score;
+}
 GameOverState::~GameOverState( ) {}
 
 void GameOverState::Init( ) {
@@ -32,6 +35,10 @@ void GameOverState::Init( ) {
 	m_Sprites.at( 1 ) = title;
 	m_Sprites.at( 2 ) = body;
 	m_Sprites.at( 3 ) = retry;
+
+	m_ScoreText.setFont( m_Data->asset.GetFont( "flappy_font" ) );
+	m_ScoreText.setCharacterSize( );
+	m_ScoreText.setFillColor( );
 }
 
 void GameOverState::HandleInput( ) {
@@ -40,10 +47,10 @@ void GameOverState::HandleInput( ) {
 		if ( sf::Event::Closed == event.type ) m_Data->window.close( );
 		if ( m_Data->input.IsSpriteClicked( m_Sprites.at( 3 ), sf::Mouse::Left,
 		                                    m_Data->window ) )
-			m_Data->machine.AddState( std::make_unique<GameState>( m_Data ), true );
+			m_Data->machine.AddState( std::make_unique<GameState>( m_Data ) );
 		else if ( sf::Event::KeyPressed == event.type )
 			if ( event.key.code == sf::Keyboard::Space )
-				m_Data->machine.AddState( std::make_unique<GameState>( m_Data ), true );
+				m_Data->machine.AddState( std::make_unique<GameState>( m_Data ) );
 	}
 }
 

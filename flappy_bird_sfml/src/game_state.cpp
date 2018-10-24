@@ -62,7 +62,8 @@ void GameState::Update( float frame_time ) {
 		if ( !m_BirdOnLand )
 			CheckCollision( );
 		else if ( m_Clock.getElapsedTime( ).asSeconds( ) > GAME_OVER_DELAY )
-			m_Data->machine.AddState( std::make_unique<GameOverState>( m_Data ), true );
+			m_Data->machine.AddState(
+			    std::make_unique<GameOverState>( m_Data, m_Score ) );
 	}
 
 	if ( m_GameState != GAMEOVER ) {
