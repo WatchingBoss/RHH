@@ -11,7 +11,7 @@ void AssetManager::LoadTexture( const std::string &name, const std::string &file
 
 	if ( !texture.loadFromFile( file_path ) )
 		std::cout << "Cannot load file: " << file_path << std::endl;
-	m_Textures[name] = texture;
+	if ( m_Textures.find( name ) == m_Textures.end( ) ) m_Textures[name] = texture;
 }
 
 void AssetManager::LoadFont( const std::string &name, const std::string &file_path ) {
@@ -19,7 +19,7 @@ void AssetManager::LoadFont( const std::string &name, const std::string &file_pa
 
 	if ( !font.loadFromFile( file_path ) )
 		std::cout << "Cannot load file: " << file_path << std::endl;
-	m_Fonts[name] = font;
+	if ( m_Fonts.find( name ) == m_Fonts.end( ) ) m_Fonts[name] = font;
 }
 
 }  // namespace Engine

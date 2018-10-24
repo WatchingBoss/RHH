@@ -28,10 +28,15 @@ void GameState::Init( ) {
 	LoadTexture( "bird_frame_3", BIRD_FRAME_3_FILE_PATH );
 	LoadTexture( "bird_frame_4", BIRD_FRAME_4_FILE_PATH );
 
+	LoadFont( "flappy_font", FLAPPY_FONT_FILE_PATH );
+
 	m_Pipe  = new Pipe( m_Data );
 	m_Land  = new Land( m_Data );
 	m_Bird  = new Bird( m_Data );
 	m_Flash = new Flash( m_Data );
+	m_Hud   = new Hud( m_Data );
+
+	m_Hud->UpdateScore( m_Score );
 
 	m_Collision = Collision( );
 }
@@ -46,19 +51,19 @@ void GameState::HandleInput( ) {
 					m_Bird->Tap( );
 					if ( m_GameState != PLAYING ) m_GameState = PLAYING;
 				}
-			}
+			} else if ( event.key.code == sf::Keyboard::Escape )
+				m_Data->window.close( );
 	}
 }
 
 void GameState::Update( float frame_time ) {
 	if ( m_GameState == GAMEOVER ) {
 		m_Flash->Show( frame_time );
-		if ( !m_BirdOnLand ) {
-			m_Bird->Animate( frame_time );
+		if ( !m_BirdOnLand )
 			CheckCollision( );
-		}
+		else if ( m_Clock.getElapsedTime( ).asSeconds( ) > GAME_OVER_DELAY )
+			m_Data->machine.AddState( std::make_unique<GameOverState>( m_Data ), true );
 	}
-	//		m_Data->machine.AddState( std::make_unique<GameOverState>( m_Data ), true );
 
 	if ( m_GameState != GAMEOVER ) {
 		m_Land->Move( frame_time );
@@ -88,6 +93,7 @@ void GameState::Draw( float frame_time ) {
 	m_Land->Draw( );
 	m_Bird->Draw( );
 	m_Flash->Draw( );
+	m_Hud->Draw( );
 
 	m_Data->window.display( );
 }
@@ -114,6 +120,7 @@ bool GameState::CheckCollision( ) {
 	for ( const sf::Sprite &land : m_Land->GetSprites( ) )
 		if ( m_Collision.CheckSpritesCollision( bird_sprite, BIRD_COLLISION_SCALE, land,
 		                                        1.f ) ) {
+			m_Clock.restart( );
 			m_Bird->StopTheBird( );
 			m_BirdOnLand = true;
 			return true;
@@ -129,17 +136,21 @@ bool GameState::CheckCollision( ) {
 
 void GameState::UpdateScore( ) {
 	++m_Score;
-	std::cout << "Current score: " << m_Score << "\n";
+	m_Hud->UpdateScore( m_Score );
 }
 
 void GameState::AddTexture( const char *tex_name, const char *file_path,
                             sf::Sprite &sprite ) {
-	m_Data->asset.LoadTexture( tex_name, file_path );
+	LoadTexture( tex_name, file_path );
 	sprite.setTexture( m_Data->asset.GetTexture( tex_name ) );
 }
 
 void GameState::LoadTexture( const char *tex_name, const char *file_path ) {
 	m_Data->asset.LoadTexture( tex_name, file_path );
+}
+
+void GameState::LoadFont( const char *font_name, const char *file_path ) {
+	m_Data->asset.LoadFont( font_name, file_path );
 }
 
 }  // namespace Engine

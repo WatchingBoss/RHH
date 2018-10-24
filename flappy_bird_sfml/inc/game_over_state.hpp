@@ -3,27 +3,34 @@
 
 #include <SFML/Graphics.hpp>
 
+#include <array>
+
+#include "definitions.h"
 #include "game.hpp"
 #include "state.hpp"
-#include "definitions.h"
 
 namespace Engine
 {
 class GameOverState : public State {
   public:
 	explicit GameOverState( gameDataRef );
-	~GameOverState();
+	~GameOverState( );
 
 	void Init( );
 
 	void HandleInput( );
-	void Update(float);
-	void Draw(float);
+	void Update( float );
+	void Draw( float );
 
   private:
 	gameDataRef m_Data;
 
-	sf::Sprite m_Bg;
+	std::array<sf::Sprite, 4> m_Sprites;
+
+  private:
+	void AddTexture( const char *, const char *, sf::Sprite & );
+	void LoadTexture( const char *, const char * );
+	void LoadFont( const char *, const char * );
 };
 }  // namespace Engine
 

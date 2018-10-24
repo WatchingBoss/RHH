@@ -8,6 +8,7 @@
 #include "definitions.h"
 #include "flash.hpp"
 #include "game.hpp"
+#include "hud.hpp"
 #include "land.hpp"
 #include "pipe.hpp"
 #include "state.hpp"
@@ -38,6 +39,7 @@ class GameState : public State {
 	Land * m_Land;
 	Bird * m_Bird;
 	Flash *m_Flash;
+	Hud *  m_Hud;
 
 	Collision m_Collision;
 
@@ -48,8 +50,11 @@ class GameState : public State {
   private:
 	void AddTexture( const char *, const char *, sf::Sprite & );
 	void LoadTexture( const char *, const char * );
-	bool CheckScore( );
+	void LoadFont( const char *, const char * );
+
 	bool CheckCollision( );
+
+	bool CheckScore( );
 	void UpdateScore( );
 };
 }  // namespace Engine

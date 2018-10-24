@@ -1,9 +1,9 @@
-#include "../inc/main_menu_state.hpp"
 #include "../inc/game_state.hpp"
+#include "../inc/main_menu_state.hpp"
 
 #include <iostream>
-#include <sstream>
 #include <memory>
+#include <sstream>
 
 namespace Engine
 {
@@ -22,7 +22,8 @@ MainMenuState::~MainMenuState( ) {}
 
 void MainMenuState::Init( ) {
 	AddTexture( "main_menu_bg", MAIN_MENU_BG_FILE_PATH, m_Bg );
-	AddTexture( "game_title", GAME_TITLE_FILE_PATH, m_Title, MW_WIDTH / 2, MW_HEIGHT / 7 );
+	AddTexture( "game_title", GAME_TITLE_FILE_PATH, m_Title, MW_WIDTH / 2,
+	            MW_HEIGHT / 7 );
 	AddTexture( "play_button", PLAY_BUTTON_FILE_PATH, m_PlayButton, MW_WIDTH / 2,
 	            MW_HEIGHT / 2 );
 }
@@ -33,7 +34,10 @@ void MainMenuState::HandleInput( ) {
 		if ( sf::Event::Closed == event.type ) m_Data->window.close( );
 		if ( m_Data->input.IsSpriteClicked( m_PlayButton, sf::Mouse::Left,
 		                                    m_Data->window ) )
-			m_Data->machine.AddState(std::make_unique<GameState>(m_Data), true);
+			m_Data->machine.AddState( std::make_unique<GameState>( m_Data ), true );
+		else if ( event.type == sf::Event::KeyPressed )
+			if ( event.key.code == sf::Keyboard::Space )
+				m_Data->machine.AddState( std::make_unique<GameState>( m_Data ), true );
 	}
 }
 

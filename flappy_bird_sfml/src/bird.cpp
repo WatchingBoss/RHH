@@ -12,7 +12,8 @@ Bird::Bird( gameDataRef data )
 	m_BirdSprite.setOrigin( m_BirdSprite.getGlobalBounds( ).width / 2,
 	                        m_BirdSprite.getGlobalBounds( ).height / 2 );
 
-	m_BirdSprite.setPosition( 100.f, 250.f );
+	m_BirdSprite.setPosition( 100.f,
+	                          static_cast<float>( m_Data->window.getSize( ).y / 3 ) );
 }
 
 Bird::~Bird( ) {}

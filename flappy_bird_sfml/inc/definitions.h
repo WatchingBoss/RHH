@@ -20,6 +20,11 @@ inline constexpr float SPLASH_STATE_SHOW_TIME = 0.5f;
 
 #define GAME_TITLE_FILE_PATH _base_path "/res/title.png"
 #define PLAY_BUTTON_FILE_PATH _base_path "/res/play_button.png"
+#define GAME_OVER_TITLE_FILE_PATH _base_path "/res/game_over_title.png"
+#define GAME_OVER_BODY_FILE_PATH _base_path "/res/game_over_body.png"
+
+/* Text */
+#define FLAPPY_FONT_FILE_PATH _base_path "/fonts/flappy_font.ttf"
 
 /* Pipes and land */
 #define PIPE_UP_FILE_PATH _base_path "/res/pipe_up.png"
@@ -52,5 +57,8 @@ enum eGAME_STATE { READY = 0, PLAYING = 1, GAMEOVER = 2 };
 
 /* Flush */
 inline constexpr float FLASH_SPEED = 1000.f;
+
+/* Game Over */
+inline constexpr float GAME_OVER_DELAY = .5f;
 
 #endif
