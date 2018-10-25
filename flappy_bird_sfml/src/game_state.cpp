@@ -1,6 +1,7 @@
 #include "../inc/game_over_state.hpp"
 #include "../inc/game_state.hpp"
 
+#include <fstream>
 #include <iostream>
 #include <memory>
 #include <sstream>
@@ -61,9 +62,24 @@ void GameState::Update( float frame_time ) {
 		m_Flash->Show( frame_time );
 		if ( !m_BirdOnLand )
 			CheckCollision( );
-		else if ( m_Clock.getElapsedTime( ).asSeconds( ) > GAME_OVER_DELAY )
+		else if ( m_Clock.getElapsedTime( ).asSeconds( ) > GAME_OVER_DELAY ) {
+			uint32       temp_best_score = 0;
+			std::fstream file( BEST_SCORE_FILE_PATH,
+			                   std::ios::in | std::ios::out | std::ios::binary );
+			if ( file ) {
+				file.read( reinterpret_cast<char *>( &temp_best_score ),
+				           sizeof temp_best_score );
+				if ( m_Score > temp_best_score )
+					file.write( reinterpret_cast<char *>( &temp_best_score ),
+					            sizeof temp_best_score );
+			} else
+				file.write( reinterpret_cast<char *>( &temp_best_score ),
+				            sizeof temp_best_score );
+			file.close( );
+
 			m_Data->machine.AddState(
 			    std::make_unique<GameOverState>( m_Data, m_Score ) );
+		}
 	}
 
 	if ( m_GameState != GAMEOVER ) {

@@ -27,14 +27,16 @@ class GameOverState : public State {
 
 	std::array<sf::Sprite, 4> m_Sprites;
 
+	uint32 m_Score, m_BestScore;
+
+	sf::Text m_ScoreText, m_BestScoreText;
+
   private:
 	void AddTexture( const char *, const char *, sf::Sprite & );
 	void LoadTexture( const char *, const char * );
 	void LoadFont( const char *, const char * );
 
-	uint32 m_Score, m_BestScore;
-
-	sf::Text m_ScoreText, m_BestScoreText;
+	void SpecifyScoreText( const sf::Sprite );
 };
 }  // namespace Engine
 
