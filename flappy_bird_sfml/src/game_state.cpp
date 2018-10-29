@@ -6,6 +6,14 @@
 #include <memory>
 #include <sstream>
 
+#ifdef _WIN32
+#include <windows.h>
+#else
+#include <dirent.h>
+#include <sys/stat.h>
+#include <sys/types.h>
+#endif
+
 namespace Engine
 {
 GameState::GameState( gameDataRef data )
@@ -63,19 +71,7 @@ void GameState::Update( float frame_time ) {
 		if ( !m_BirdOnLand )
 			CheckCollision( );
 		else if ( m_Clock.getElapsedTime( ).asSeconds( ) > GAME_OVER_DELAY ) {
-			uint32       temp_best_score = 0;
-			std::fstream file( BEST_SCORE_FILE_PATH,
-			                   std::ios::in | std::ios::out | std::ios::binary );
-			if ( file ) {
-				file.read( reinterpret_cast<char *>( &temp_best_score ),
-				           sizeof temp_best_score );
-				if ( m_Score > temp_best_score )
-					file.write( reinterpret_cast<char *>( &temp_best_score ),
-					            sizeof temp_best_score );
-			} else
-				file.write( reinterpret_cast<char *>( &temp_best_score ),
-				            sizeof temp_best_score );
-			file.close( );
+			UpdateBestScoreFile( );
 
 			m_Data->machine.AddState(
 			    std::make_unique<GameOverState>( m_Data, m_Score ) );
@@ -154,6 +150,41 @@ bool GameState::CheckCollision( ) {
 void GameState::UpdateScore( ) {
 	++m_Score;
 	m_Hud->UpdateScore( m_Score );
+}
+
+void GameState::CheckDataDirectory( ) {
+#ifdef _WIN32
+	DWORD dwAttrib = GetFileAttributes( DATA_DIRECTORY );
+	if ( dwAttrib == INVALID_FILE_ATTRIBUTES )
+		if ( !CreateDirectoryA( DATA_DIRECTORY, NULL ) )
+			printf( "Cannot create directory %s\n", DATA_DIRECTORY );
+#else
+	DIR *dir = opendir( DATA_DIRECTORY );
+	if ( !dir )
+		if ( !mkdir( DATA_DIRECTORY, S_IRWXU | S_IRWXG | S_IRWXO ) )
+			printf( "Cannot create directory %s\n", DATA_DIRECTORY );
+	dir.close( );
+#endif
+}
+
+void GameState::UpdateBestScoreFile( ) {
+	CheckDataDirectory( );
+
+	uint32       temp_best_score = 0;
+	std::fstream file( BEST_SCORE_FILE_PATH,
+	                   std::ios::in | std::ios::out | std::ios::binary );
+	if ( file.is_open( ) ) {
+		file.read( reinterpret_cast<char *>( &temp_best_score ), sizeof temp_best_score );
+		if ( m_Score > temp_best_score ) {
+			file.seekp( 0 );
+			file.write( reinterpret_cast<char *>( &m_Score ), sizeof m_Score );
+		}
+		file.close( );
+	} else {
+		std::fstream file( BEST_SCORE_FILE_PATH, std::ios::out | std::ios::binary );
+		file.write( reinterpret_cast<char *>( &m_Score ), sizeof m_Score );
+		file.close( );
+	}
 }
 
 void GameState::AddTexture( const char *tex_name, const char *file_path,

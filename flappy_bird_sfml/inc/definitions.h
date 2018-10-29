@@ -62,6 +62,7 @@ inline constexpr float FLASH_SPEED = 1000.f;
 inline constexpr float GAME_OVER_DELAY = .5f;
 
 /* Best score */
-#define BEST_SCORE_FILE_PATH "data/best_score.flappy"
+#define DATA_DIRECTORY "./data"
+#define BEST_SCORE_FILE_PATH DATA_DIRECTORY "/best_score"
 
 #endif

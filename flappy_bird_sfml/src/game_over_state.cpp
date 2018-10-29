@@ -73,22 +73,22 @@ void GameOverState::SpecifyScoreText( const sf::Sprite body ) {
 	const sf::FloatRect body_dim = body.getGlobalBounds( );
 
 	m_ScoreText.setFont( m_Data->asset.GetFont( "flappy_font" ) );
-	m_ScoreText.setCharacterSize( 50 );
-	m_ScoreText.setFillColor( sf::Color::Cyan );
+	m_ScoreText.setCharacterSize( 55 );
+	m_ScoreText.setFillColor( sf::Color::White );
 	sf::FloatRect score_text_dim = m_ScoreText.getGlobalBounds( );
 	m_ScoreText.setOrigin( score_text_dim.width / 2, score_text_dim.height / 2 );
-	m_ScoreText.setPosition( body_dim.left + body_dim.width * .7f,
-	                         body_dim.top + body_dim.height * .3f );
+	m_ScoreText.setPosition( body_dim.left + body_dim.width * .75f,
+	                         body_dim.top + body_dim.height * .28f );
 	m_ScoreText.setString( std::to_string( m_Score ) );
 
 	m_BestScoreText.setFont( m_Data->asset.GetFont( "flappy_font" ) );
-	m_ScoreText.setCharacterSize( 50 );
-	m_ScoreText.setFillColor( sf::Color::Cyan );
-	sf::FloatRect best_score_text_dim = m_ScoreText.getGlobalBounds( );
-	m_ScoreText.setOrigin( best_score_text_dim.width / 2,
-	                       best_score_text_dim.height / 2 );
-	m_ScoreText.setPosition( body_dim.left + body_dim.width * .7f,
-	                         body_dim.top + body_dim.height * .5f );
+	m_BestScoreText.setCharacterSize( 60 );
+	m_BestScoreText.setFillColor( sf::Color::White );
+	sf::FloatRect best_score_text_dim = m_BestScoreText.getGlobalBounds( );
+	m_BestScoreText.setOrigin( best_score_text_dim.width / 2,
+	                           best_score_text_dim.height / 2 );
+	m_BestScoreText.setPosition( body_dim.left + body_dim.width * .75f,
+	                             body_dim.top + body_dim.height * .62f );
 	m_BestScoreText.setString( std::to_string( m_BestScore ) );
 }
 

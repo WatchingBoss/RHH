@@ -56,6 +56,9 @@ class GameState : public State {
 
 	bool CheckScore( );
 	void UpdateScore( );
+
+	void CheckDataDirectory( );
+	void UpdateBestScoreFile( );
 };
 }  // namespace Engine
 

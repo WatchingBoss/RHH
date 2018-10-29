@@ -68,7 +68,7 @@ void Pipe::SpawnInvisiblePipe( const float y_offset ) {
 
 void Pipe::SpawnScoringPipe( ) {
 	sf::Sprite sprite( m_Data->asset.GetTexture( "score_pipe" ) );
-	sprite.setPosition( static_cast<float>( m_Data->window.getSize( ).x ), 0 );
+	sprite.setPosition( static_cast<float>( m_Data->window.getSize( ).x ) + 20.f, 0 );
 
 	m_ScoreSprites.push_back( sprite );
 }
