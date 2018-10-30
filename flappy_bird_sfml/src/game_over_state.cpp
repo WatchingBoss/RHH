@@ -12,6 +12,7 @@ GameOverState::GameOverState( gameDataRef data, uint32 score )
     : m_Data( data ), m_Score( score ), m_BestScore( score ) {
 	std::ifstream file( BEST_SCORE_FILE_PATH, std::ios::in | std::ios::binary );
 	file.read( reinterpret_cast<char *>( &m_BestScore ), sizeof m_BestScore );
+	file.close( );
 }
 GameOverState::~GameOverState( ) {}
 
@@ -40,6 +41,7 @@ void GameOverState::Init( ) {
 	m_Sprites.at( 3 ) = retry;
 
 	SpecifyScoreText( body );
+	SetMedal( body );
 }
 
 void GameOverState::HandleInput( ) {
@@ -68,6 +70,11 @@ void GameOverState::Draw( float frame_time ) {
 }
 
 /*** Private methods ***/
+
+void SetMedal( const sf::Sprite body ) {
+	const char medal_path[50] = { 0 };
+	if
+}
 
 void GameOverState::SpecifyScoreText( const sf::Sprite body ) {
 	const sf::FloatRect body_dim = body.getGlobalBounds( );

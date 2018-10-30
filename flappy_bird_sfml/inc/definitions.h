@@ -35,6 +35,17 @@ inline constexpr float SPLASH_STATE_SHOW_TIME = 0.5f;
 inline constexpr float PIPE_MOVEMENT_SPEED = 200.f;
 inline constexpr float PIPE_SPAWN_FREQ     = 2.0f;
 
+/* Medals */
+#define BRONZE_MEDALE_FILE_PATH _base_path "/bronze_medal.png"
+#define SILVER_MEDALE_FILE_PATH _base_path "/silver_medal.png"
+#define GOLD_MEDALE_FILE_PATH _base_path "/gold_medal.png"
+#define PLATINUM_MEDALE_FILE_PATH _base_path "/platinum_medal.png"
+
+inline constexpr uint32 BRONZE_SCORE   = 0;
+inline constexpr uint32 SILVER_SCORE   = 25;
+inline constexpr uint32 GOLD_SCORE     = 50;
+inline constexpr uint32 PLATINUM_SCORE = 150;
+
 /* Bird */
 #define BIRD_FRAME_1_FILE_PATH _base_path "/res/bird_01.png"
 #define BIRD_FRAME_2_FILE_PATH _base_path "/res/bird_02.png"

@@ -26,6 +26,7 @@ class GameOverState : public State {
 	gameDataRef m_Data;
 
 	std::array<sf::Sprite, 4> m_Sprites;
+	sf::Sprite                m_Medal;
 
 	uint32 m_Score, m_BestScore;
 
@@ -37,6 +38,7 @@ class GameOverState : public State {
 	void LoadFont( const char *, const char * );
 
 	void SpecifyScoreText( const sf::Sprite );
+	void SetMedal( const sf::Sprite );
 };
 }  // namespace Engine
 
