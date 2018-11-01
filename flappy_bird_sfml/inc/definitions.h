@@ -75,4 +75,9 @@ inline constexpr float GAME_OVER_DELAY = .5f;
 #define DATA_DIRECTORY "./data"
 #define BEST_SCORE_FILE_PATH DATA_DIRECTORY "/best_score"
 
+/* Sounds */
+#define HIT_SOUND_FILE_PATH _base_path "/audio/Hit.wav"
+#define POINT_SOUND_FILE_PATH _base_path "/audio/Point.wav"
+#define WING_SOUND_FILE_PATH _base_path "/audio/Wing.wav"
+
 #endif

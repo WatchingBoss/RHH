@@ -11,6 +11,7 @@
 #include "hud.hpp"
 #include "land.hpp"
 #include "pipe.hpp"
+#include "sounds.hpp"
 #include "state.hpp"
 
 namespace Engine
@@ -40,6 +41,7 @@ class GameState : public State {
 	Bird * m_Bird;
 	Flash *m_Flash;
 	Hud *  m_Hud;
+	Sound *m_Sound;
 
 	Collision m_Collision;
 

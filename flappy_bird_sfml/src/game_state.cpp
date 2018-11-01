@@ -23,6 +23,8 @@ GameState::~GameState( ) {
 	delete ( m_Land );
 	delete ( m_Bird );
 	delete ( m_Flash );
+	delete ( m_Hud );
+	delete ( m_Sound );
 }
 
 void GameState::Init( ) {
@@ -44,6 +46,7 @@ void GameState::Init( ) {
 	m_Bird  = new Bird( m_Data );
 	m_Flash = new Flash( m_Data );
 	m_Hud   = new Hud( m_Data );
+	m_Sound = new Sound( );
 
 	m_Hud->UpdateScore( m_Score );
 
@@ -58,6 +61,7 @@ void GameState::HandleInput( ) {
 			if ( event.key.code == sf::Keyboard::Space ) {
 				if ( m_GameState != GAMEOVER ) {
 					m_Bird->Tap( );
+					m_Sound->Wing( );
 					if ( m_GameState != PLAYING ) m_GameState = PLAYING;
 				}
 			} else if ( event.key.code == sf::Keyboard::Escape )
@@ -82,8 +86,14 @@ void GameState::Update( float frame_time ) {
 		m_Land->Move( frame_time );
 		m_Bird->Animate( frame_time );
 
-		if ( CheckCollision( ) ) m_GameState = GAMEOVER;
-		if ( CheckScore( ) ) UpdateScore( );
+		if ( CheckCollision( ) ) {
+			m_Sound->Hit( );
+			m_GameState = GAMEOVER;
+		}
+		if ( CheckScore( ) ) {
+			m_Sound->Point( );
+			UpdateScore( );
+		}
 	}
 
 	if ( m_GameState == PLAYING ) {

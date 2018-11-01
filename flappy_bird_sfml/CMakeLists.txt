@@ -35,7 +35,7 @@ endif(MSVC)
 ## Add SFML required components
 find_package(SFML 2 COMPONENTS network audio graphics window system REQUIRED)
 if(SFML_FOUND)
-set( SFML_LINKS	"sfml-graphics"	"sfml-window" "sfml-system")
+set( SFML_LINKS	"sfml-graphics"	"sfml-window" "sfml-system" "sfml-audio")
 endif()
 
 # Groups
