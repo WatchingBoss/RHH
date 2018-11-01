@@ -36,12 +36,11 @@ inline constexpr float PIPE_MOVEMENT_SPEED = 200.f;
 inline constexpr float PIPE_SPAWN_FREQ     = 2.0f;
 
 /* Medals */
-#define BRONZE_MEDALE_FILE_PATH _base_path "/bronze_medal.png"
-#define SILVER_MEDALE_FILE_PATH _base_path "/silver_medal.png"
-#define GOLD_MEDALE_FILE_PATH _base_path "/gold_medal.png"
-#define PLATINUM_MEDALE_FILE_PATH _base_path "/platinum_medal.png"
+#define BRONZE_MEDALE_FILE_PATH _base_path "/res/bronze_medal.png"
+#define SILVER_MEDALE_FILE_PATH _base_path "/res/silver_medal.png"
+#define GOLD_MEDALE_FILE_PATH _base_path "/res/gold_medal.png"
+#define PLATINUM_MEDALE_FILE_PATH _base_path "/res/platinum_medal.png"
 
-inline constexpr uint32 BRONZE_SCORE   = 0;
 inline constexpr uint32 SILVER_SCORE   = 25;
 inline constexpr uint32 GOLD_SCORE     = 50;
 inline constexpr uint32 PLATINUM_SCORE = 150;

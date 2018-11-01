@@ -51,9 +51,12 @@ void GameOverState::HandleInput( ) {
 		if ( m_Data->input.IsSpriteClicked( m_Sprites.at( 3 ), sf::Mouse::Left,
 		                                    m_Data->window ) )
 			m_Data->machine.AddState( std::make_unique<GameState>( m_Data ) );
-		else if ( sf::Event::KeyPressed == event.type )
+		else if ( sf::Event::KeyPressed == event.type ) {
 			if ( event.key.code == sf::Keyboard::Space )
 				m_Data->machine.AddState( std::make_unique<GameState>( m_Data ) );
+			else if ( event.key.code == sf::Keyboard::Escape )
+				m_Data->window.close( );
+		}
 	}
 }
 
@@ -65,15 +68,32 @@ void GameOverState::Draw( float frame_time ) {
 	for ( const sf::Sprite &sprite : m_Sprites ) m_Data->window.draw( sprite );
 	m_Data->window.draw( m_ScoreText );
 	m_Data->window.draw( m_BestScoreText );
+	m_Data->window.draw( m_Medal );
 
 	m_Data->window.display( );
 }
 
 /*** Private methods ***/
 
-void SetMedal( const sf::Sprite body ) {
-	const char medal_path[50] = { 0 };
-	if
+void GameOverState::SetMedal( const sf::Sprite body ) {
+	std::string medal_path;
+	if ( m_Score > PLATINUM_SCORE )
+		medal_path = PLATINUM_MEDALE_FILE_PATH;
+	else if ( m_Score > GOLD_SCORE )
+		medal_path = GOLD_MEDALE_FILE_PATH;
+	else if ( m_Score > SILVER_SCORE )
+		medal_path = SILVER_MEDALE_FILE_PATH;
+	else
+		medal_path = BRONZE_MEDALE_FILE_PATH;
+
+	AddTexture( "medal", medal_path.c_str( ), m_Medal );
+
+	const sf::FloatRect body_dim  = body.getGlobalBounds( ),
+	                    medal_dim = m_Medal.getGlobalBounds( );
+
+	m_Medal.setOrigin( medal_dim.width / 2, medal_dim.height / 2 );
+	m_Medal.setPosition( body_dim.left + body_dim.width * .23f,
+	                     body_dim.top + body_dim.height * .55f );
 }
 
 void GameOverState::SpecifyScoreText( const sf::Sprite body ) {
@@ -107,10 +127,6 @@ void GameOverState::AddTexture( const char *tex_name, const char *file_path,
 
 void GameOverState::LoadTexture( const char *tex_name, const char *file_path ) {
 	m_Data->asset.LoadTexture( tex_name, file_path );
-}
-
-void GameOverState::LoadFont( const char *font_name, const char *file_path ) {
-	m_Data->asset.LoadFont( font_name, file_path );
 }
 
 }  // namespace Engine

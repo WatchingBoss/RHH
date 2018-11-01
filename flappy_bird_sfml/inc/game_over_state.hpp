@@ -35,7 +35,6 @@ class GameOverState : public State {
   private:
 	void AddTexture( const char *, const char *, sf::Sprite & );
 	void LoadTexture( const char *, const char * );
-	void LoadFont( const char *, const char * );
 
 	void SpecifyScoreText( const sf::Sprite );
 	void SetMedal( const sf::Sprite );
