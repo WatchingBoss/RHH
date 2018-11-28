@@ -8,6 +8,16 @@
         "msvc_x64"
       ],
       "buildRoot": "${projectDir}\\..\\build\\${name}"
+    },
+
+    {
+      "name": "release_x64",
+      "generator": "Ninja",
+      "configurationType": "Release",
+      "inheritEnvironments": [
+        "msvc_x64"
+      ],
+      "buildRoot": "${projectDir}\\..\\build\\${name}"
     }
   ]
 }
