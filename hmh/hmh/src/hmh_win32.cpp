@@ -35,16 +35,15 @@ LRESULT CALLBACK MainWindowCallback( HWND hwnd, UINT msg, WPARAM wParam, LPARAM 
 
 int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE, LPSTR lpCmdLine, int nCmdShow ) {
 	WNDCLASS WindowClass      = {};
-	WindowClass.style         = CS_OWNDC | CS_HREDRAW | CS_VREDRAW;
 	WindowClass.lpfnWndProc   = MainWindowCallback;
 	WindowClass.hInstance     = hInstance;
 	WindowClass.lpszClassName = WindowClassName;
 
-	if ( RegisterClass( &WindowClass ) ) {
-		HWND WindowHandle = CreateWindowEx( NULL, WindowClassName, "Like handmade hero",
-		                                    WS_OVERLAPPEDWINDOW | WS_VISIBLE,
-		                                    CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT,
-		                                    CW_USEDEFAULT, NULL, NULL, hInstance, NULL );
+	if ( RegisterClassA( &WindowClass ) ) {
+		HWND WindowHandle = CreateWindowExA( NULL, WindowClassName, "Like handmade hero",
+		                                     WS_OVERLAPPEDWINDOW | WS_VISIBLE,
+		                                     CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT,
+		                                     CW_USEDEFAULT, NULL, NULL, hInstance, NULL );
 		if ( WindowHandle ) {
 			MSG Message = {};
 			while ( GetMessage( &Message, NULL, 0, 0 ) > 0 ) {
