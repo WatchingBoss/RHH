@@ -46,9 +46,9 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE, LPSTR lpCmdLine, int nCmdSho
 		                                     CW_USEDEFAULT, NULL, NULL, hInstance, NULL );
 		if ( WindowHandle ) {
 			MSG Message = {};
-			while ( GetMessage( &Message, NULL, 0, 0 ) > 0 ) {
+			while ( GetMessageA( &Message, NULL, 0, 0 ) > 0 ) {
 				TranslateMessage( &Message );
-				DispatchMessage( &Message );
+				DispatchMessageA( &Message );
 			}
 		} else
 			MessageBox( NULL, "CreateWindowEx", "Error", MB_OK );
